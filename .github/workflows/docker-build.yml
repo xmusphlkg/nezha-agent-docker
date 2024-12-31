@@ -27,22 +27,21 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Check for Nezha Agent updates
-      id: check
       run: |
         LATEST_VERSION=$(curl -s https://api.github.com/repos/nezhahq/agent/releases/latest | grep tag_name | cut -d '"' -f 4)
         echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-        echo "::set-output name=version::$LATEST_VERSION"
+        echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV_FILE  # 使用环境文件更新方法
 
     - name: Build and push
-      if: steps.check.outputs.version != env.CURRENT_VERSION
+      if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
       uses: docker/build-push-action@v2
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/nezha-agent:${{ steps.check.outputs.version }}
-        build-args: VERSION=${{ steps.check.outputs.version }}
+        tags: kanggle/nezha-agent:${{ env.LATEST_VERSION }}
+        build-args: VERSION=${{ env.LATEST_VERSION }}
 
     - name: Update current version
-      if: steps.check.outputs.version != env.CURRENT_VERSION
-      run: echo "CURRENT_VERSION=${{ steps.check.outputs.version }}" >> $GITHUB_ENV
+      if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+      run: echo "CURRENT_VERSION=${{ env.LATEST_VERSION }}" >> $GITHUB_ENV
