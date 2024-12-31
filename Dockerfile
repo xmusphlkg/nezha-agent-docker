@@ -20,11 +20,11 @@ RUN wget $AGENT_URL -O nezha-agent.zip && \
 # Copy the setup-config script from your context into the image
 COPY setup-config.sh /usr/local/bin/setup-config.sh
 
-# Ensure the script is executable and run it to setup the config.yml
-RUN chmod +x /usr/local/bin/setup-config.sh && /usr/local/bin/setup-config.sh
+# Ensure both the script and agent are executable
+RUN chmod +x /usr/local/bin/setup-config.sh /usr/local/bin/nezha-agent
 
 # Set the working directory
 WORKDIR /usr/local/bin/nezha
 
-# Start the Nezha Agent using the generated config file
-CMD ["./nezha-agent", "-c", "config.yml"]
+# Set default command to first run the setup script and then start Nezha Agent
+CMD ["/bin/sh", "-c", "./setup-config.sh && ./nezha-agent -c config.yml"]
