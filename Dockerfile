@@ -18,10 +18,10 @@ RUN wget $AGENT_URL -O nezha-agent.zip && \
     rm -f nezha-agent.zip
 
 # Copy the setup-config script from your context into the image
-COPY setup-config.sh /usr/local/bin/setup-config.sh
+COPY setup-config.sh /usr/local/bin/nezha/setup-config.sh
 
 # Ensure both the script and agent are executable
-RUN chmod +x /usr/local/bin/setup-config.sh /usr/local/bin/nezha-agent
+RUN chmod +x /usr/local/bin/nezha-agent
 
 # Set the working directory
 WORKDIR /usr/local/bin/nezha
