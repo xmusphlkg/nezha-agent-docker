@@ -1,10 +1,12 @@
 #!/bin/bash
 
+# Default values or skip setting if not provided
+CLIENT_SECRET=${CLIENT_SECRET:-""}
+SERVER=${SERVER:-""}
+
 # Check for required environment variables
 if [ -z "$CLIENT_SECRET" ] || [ -z "$SERVER" ]; then
-  echo "Error: CLIENT_SECRET and SERVER environment variables are required."
-  exit 1
-fi
+  echo "CLIENT_SECRET or SERVER not provided. Configuration will be set at runtime."
 
 # Generate UUID if not provided
 UUID=${UUID:-$(uuidgen)}
