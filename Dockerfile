@@ -9,19 +9,21 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     unzip \
-    ca-certificates --no-install-recommends && rm -rf /var/lib/apt/lists/*
+    ca-certificates --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
-# Download and install the latest version of the Nezha Agent for amd64
-RUN wget $AGENT_URL -O nezha-agent.zip && \
-    unzip nezha-agent.zip -d /usr/local/bin && \
-    chmod +x /usr/local/bin/nezha-agent && \
+# Create a directory and install the Nezha Agent in one layer
+RUN mkdir -p /usr/local/bin/nezha && \
+    wget $AGENT_URL -O nezha-agent.zip && \
+    unzip nezha-agent.zip -d /usr/local/bin/nezha && \
+    chmod +x /usr/local/bin/nezha/nezha-agent && \
     rm -f nezha-agent.zip
 
 # Copy the setup-config script from your context into the image
 COPY setup-config.sh /usr/local/bin/nezha/setup-config.sh
 
-# Ensure both the script and agent are executable
-RUN chmod +x /usr/local/bin/nezha-agent
+# Ensure the script and agent are executable
+RUN chmod +x /usr/local/bin/nezha/setup-config.sh
 
 # Set the working directory
 WORKDIR /usr/local/bin/nezha
