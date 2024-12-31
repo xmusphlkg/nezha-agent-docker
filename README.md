@@ -24,6 +24,13 @@ docker build -t nezha-agent .
 docker pull kanggle/nezha-agent
 ```
 
+如果无法拉取可以尝试使用国内镜像源：
+
+```bash
+docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/kanggle/nezha-agent:v1.4.1
+docker tag  swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/kanggle/nezha-agent:v1.4.1  docker.io/kanggle/nezha-agent:v1.4.1
+```
+
 ### 运行容器
 使用以下命令来运行 Nezha Agent 容器，确保替换 `<your_client_secret>` 和 `<your_server>` 为实际的配置值：
 
