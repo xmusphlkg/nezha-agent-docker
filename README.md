@@ -27,8 +27,7 @@ docker pull kanggle/nezha-agent
 如果无法拉取可以尝试使用国内镜像源：
 
 ```bash
-docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/kanggle/nezha-agent:latest
-docker tag  swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/kanggle/nezha-agent:latest  docker.io/kanggle/nezha-agent:v1.4.1
+https://www.wanpeng.life/2989.html
 ```
 
 ### 运行容器
