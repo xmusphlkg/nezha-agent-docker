@@ -49,7 +49,7 @@ docker run -d \
 |-----------------------|--------------------------------|-------|-------------------|
 | `CLIENT_SECRET`       | 客户端密钥，用于 Nezha 服务器的认证 | 是    | *无默认值，必须提供* |
 | `SERVER`              | Nezha 服务器的地址和端口           | 是    | *无默认值，必须提供* |
-| `debug`               | 启用调试模式                       | 否    | `false`           |
+| `debug`               | 启用调试模式                       | 否    | `true`           |
 | `disable_auto_update` | 禁用自动更新                       | 否    | `false`           |
 | `disable_command_execute` | 禁用命令执行                 | 否    | `false`           |
 | `disable_force_update`| 禁用强制更新                       | 否    | `false`           |
