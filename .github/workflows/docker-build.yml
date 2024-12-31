@@ -2,8 +2,13 @@ name: Build and Push Docker Image
 
 on:
   schedule:
-    # 每天运行一次
     - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      force_build:
+        description: 'Force rebuild even if no new version is found (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
   build:
