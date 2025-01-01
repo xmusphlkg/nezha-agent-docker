@@ -21,9 +21,9 @@ fi
 cat <<EOF > /usr/local/bin/nezha/config.yml
 client_secret: $CLIENT_SECRET
 debug: ${DEBUG:-true}
-disable_auto_update: ${DISABLE_AUTO_UPDATE:-false}
+disable_auto_update: ${DISABLE_AUTO_UPDATE:-true}
 disable_command_execute: ${DISABLE_COMMAND_EXECUTE:-false}
-disable_force_update: ${DISABLE_FORCE_UPDATE:-false}
+disable_force_update: ${DISABLE_FORCE_UPDATE:-true}
 disable_nat: ${DISABLE_NAT:-false}
 disable_send_query: ${DISABLE_SEND_QUERY:-false}
 gpu: ${GPU:-false}

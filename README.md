@@ -35,8 +35,6 @@ https://www.wanpeng.life/2989.html
 docker run -d \
   -e CLIENT_SECRET='<your_client_secret>' \
   -e SERVER='<your_server>' \
-  -e DISABLE_FORCE_UPDATE='true' \
-  -e DISABLE_AUTO_UPDATE='true' \
   kanggle/nezha-agent
 ```
 
@@ -50,9 +48,9 @@ docker run -d \
 | `CLIENT_SECRET`           | 客户端密钥，用于 Nezha 服务器的认证 | 是    | *无默认值，必须提供* |
 | `SERVER`                  | Nezha 服务器的地址和端口           | 是    | *无默认值，必须提供* |
 | `DEBUG`                   | 启用调试模式                       | 否    | `true`           |
-| `DISABLE_AUTO_UPDATE`     | 禁用自动更新                       | 否    | `false`           |
+| `DISABLE_AUTO_UPDATE`     | 禁用自动更新                       | 否    | `true`           |
 | `DISABLE_COMMAND_EXECUTE` | 禁用命令执行                       | 否    | `false`           |
-| `DISABLE_FORCE_UPDATE`    | 禁用强制更新                       | 否    | `false`           |
+| `DISABLE_FORCE_UPDATE`    | 禁用强制更新                       | 否    | `true`        |
 | `DISABLE_NAT`             | 禁用 NAT                          | 否    | `false`           |
 | `DISABLE_SEND_QUERY`      | 禁用发送查询                       | 否    | `false`           |
 | `GPU`                     | 启用 GPU 监控                      | 否    | `false`           |
