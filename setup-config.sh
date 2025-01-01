@@ -10,7 +10,12 @@ if [ -z "$CLIENT_SECRET" ] || [ -z "$SERVER" ]; then
 fi  # Closing the if statement
 
 # Generate UUID if not provided
-UUID=${UUID:-$(uuidgen)}
+if command -v uuidgen >/dev/null 2>&1; then
+  UUID=${UUID:-$(uuidgen)}
+else
+  echo "uuidgen not found, using fallback method to generate UUID."
+  UUID=${UUID:-$(cat /proc/sys/kernel/random/uuid 2>/dev/null || openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\)$/\1-\2-\3-\4-\5/') }
+fi
 
 # Create config.yml with the provided or default settings
 cat <<EOF > /usr/local/bin/nezha/config.yml

@@ -26,9 +26,7 @@ docker pull kanggle/nezha-agent
 
 如果无法拉取可以尝试使用国内镜像源：
 
-```bash
 https://www.wanpeng.life/2989.html
-```
 
 ### 运行容器
 使用以下命令来运行 Nezha Agent 容器，确保替换 `<your_client_secret>` 和 `<your_server>` 为实际的配置值：
@@ -37,6 +35,8 @@ https://www.wanpeng.life/2989.html
 docker run -d \
   -e CLIENT_SECRET='<your_client_secret>' \
   -e SERVER='<your_server>' \
+  -e DISABLE_FORCE_UPDATE='true' \
+  -e DISABLE_AUTO_UPDATE='true' \
   kanggle/nezha-agent
 ```
 
@@ -44,27 +44,29 @@ docker run -d \
 
 以下表格列出了所有可配置的环境变量，它们的默认值以及是否为必填项：
 
-| 参数名                  | 描述                           | 必须的 | 默认值            |
-|-----------------------|--------------------------------|-------|-------------------|
-| `CLIENT_SECRET`       | 客户端密钥，用于 Nezha 服务器的认证 | 是    | *无默认值，必须提供* |
-| `SERVER`              | Nezha 服务器的地址和端口           | 是    | *无默认值，必须提供* |
-| `debug`               | 启用调试模式                       | 否    | `true`           |
-| `disable_auto_update` | 禁用自动更新                       | 否    | `false`           |
-| `disable_command_execute` | 禁用命令执行                 | 否    | `false`           |
-| `disable_force_update`| 禁用强制更新                       | 否    | `false`           |
-| `disable_nat`         | 禁用 NAT                          | 否    | `false`           |
-| `disable_send_query`  | 禁用发送查询                       | 否    | `false`           |
-| `gpu`                 | 启用 GPU 监控                      | 否    | `false`           |
-| `insecure_tls`        | 启用不安全的 TLS                   | 否    | `false`           |
-| `ip_report_period`    | IP 报告周期（秒）                  | 否    | `1800`            |
-| `report_delay`        | 报告延迟（秒）                     | 否    | `3`               |
-| `self_update_period`  | 自更新周期（秒）                   | 否    | `0`               |
-| `skip_connection_count` | 跳过连接计数                  | 否    | `false`           |
-| `skip_procs_count`    | 跳过进程计数                       | 否    | `false`           |
-| `temperature`         | 启用温度监控                       | 否    | `false`           |
-| `tls`                 | 启用 TLS                           | 否    | `false`           |
-| `use_gitee_to_upgrade`| 使用 Gitee 进行升级                | 否    | `false`           |
-| `use_ipv6_country_code` | 使用 IPv6               | 否    | `false`           |
+
+| 参数名                      | 描述                           | 必须的 | 默认值            |
+|---------------------------|--------------------------------|-------|-------------------|
+| `CLIENT_SECRET`           | 客户端密钥，用于 Nezha 服务器的认证 | 是    | *无默认值，必须提供* |
+| `SERVER`                  | Nezha 服务器的地址和端口           | 是    | *无默认值，必须提供* |
+| `DEBUG`                   | 启用调试模式                       | 否    | `true`           |
+| `DISABLE_AUTO_UPDATE`     | 禁用自动更新                       | 否    | `false`           |
+| `DISABLE_COMMAND_EXECUTE` | 禁用命令执行                       | 否    | `false`           |
+| `DISABLE_FORCE_UPDATE`    | 禁用强制更新                       | 否    | `false`           |
+| `DISABLE_NAT`             | 禁用 NAT                          | 否    | `false`           |
+| `DISABLE_SEND_QUERY`      | 禁用发送查询                       | 否    | `false`           |
+| `GPU`                     | 启用 GPU 监控                      | 否    | `false`           |
+| `INSECURE_TLS`            | 启用不安全的 TLS                   | 否    | `false`           |
+| `IP_REPORT_PERIOD`        | IP 报告周期（秒）                  | 否    | `1800`            |
+| `REPORT_DELAY`            | 报告延迟（秒）                     | 否    | `3`               |
+| `SELF_UPDATE_PERIOD`      | 自更新周期（秒）                   | 否    | `0`               |
+| `SKIP_CONNECTION_COUNT`   | 跳过连接计数                       | 否    | `false`           |
+| `SKIP_PROCS_COUNT`        | 跳过进程计数                       | 否    | `false`           |
+| `TEMPERATURE`             | 启用温度监控                       | 否    | `false`           |
+| `TLS`                     | 启用 TLS                           | 否    | `false`           |
+| `USE_GITEE_TO_UPGRADE`    | 使用 Gitee 进行升级                | 否    | `false`           |
+| `USE_IPV6_COUNTRY_CODE`   | 使用 IPv6 国家代码                 | 否    | `false`           |
+
 
 ## 项目源码
 
