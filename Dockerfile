@@ -2,7 +2,8 @@
 FROM debian:11-slim
 
 # Set the URL for downloading the Nezha Agent
-ENV AGENT_URL=https://github.com/nezhahq/agent/releases/latest/download/nezha-agent_linux_amd64.zip
+ARG TARGETARCH
+ENV AGENT_URL=https://github.com/nezhahq/agent/releases/latest/download/nezha-agent_linux_${TARGETARCH}.zip
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
