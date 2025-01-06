@@ -1,5 +1,8 @@
 # Nezha Agent Docker 项目
 
+## 支持平台
+![amd64](https://img.shields.io/badge/amd64-blue) ![arm64](https://img.shields.io/badge/arm64-blue)
+
 ## 项目简介
 本项目通过 Docker 容器化技术部署 Nezha Agent，以便于在各种环境中快速、轻松地启动和管理 Nezha 监控系统的 Agent 组件。
 
