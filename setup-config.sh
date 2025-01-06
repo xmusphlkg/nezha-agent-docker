@@ -17,6 +17,9 @@ else
   UUID=${UUID:-$(cat /proc/sys/kernel/random/uuid 2>/dev/null || openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\)$/\1-\2-\3-\4-\5/') }
 fi
 
+# Print UUID
+echo "Your UUID: $UUID"
+
 # Create config.yml with the provided or default settings
 cat <<EOF > /usr/local/bin/nezha/config.yml
 client_secret: $CLIENT_SECRET
