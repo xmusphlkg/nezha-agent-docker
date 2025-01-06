@@ -37,9 +37,35 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64
         push: true
         tags: |
           kanggle/nezha-agent:${{ env.LATEST_VERSION }}
           kanggle/nezha-agent:latest
         build-args: |
           VERSION=${{ env.LATEST_VERSION }}
+
+    - name: Save Docker image as tar archive
+      if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+      run: |
+        mkdir -p release
+        docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/amd64
+        docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-amd64.tar
+        docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/arm64
+        docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-arm64.tar
+
+    - name: Compress tar archives
+      if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+      run: |
+        cd release
+        gzip nezha-agent-amd64.tar
+        gzip nezha-agent-arm64.tar
+
+    - name: Create GitHub Release
+      if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.LATEST_VERSION }}
+        files: |
+          release/nezha-agent-amd64.tar.gz
+          release/nezha-agent-arm64.tar.gz
