@@ -11,16 +11,11 @@ on:
         default: 'false'
 
 jobs:
-  build:
+  build_amd64:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -40,46 +35,68 @@ jobs:
           fi
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
 
-      - name: Get current deployed version
-        run: |
-          CURRENT_VERSION=$(docker manifest inspect kanggle/nezha-agent:latest | jq -r '.manifests[0].digest' || echo "none")
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-
-      - name: Build and push
+      - name: Build and push (AMD64)
         if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
-            kanggle/nezha-agent:${{ env.LATEST_VERSION }}
-            kanggle/nezha-agent:latest
+            kanggle/nezha-agent:${{ env.LATEST_VERSION }}-amd64
+            kanggle/nezha-agent:latest-amd64
           build-args: |
             VERSION=${{ env.LATEST_VERSION }}
 
-      - name: Save Docker image as tar archive
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
-        run: |
-          mkdir -p release
-          docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/amd64 || true
-          docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-amd64.tar || true
-          docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/arm64 || true
-          docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-arm64.tar || true
+  build_arm64:
+    runs-on: [self-hosted, linux, ARM64]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Compress tar archives
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
-        run: |
-          cd release
-          [[ -f nezha-agent-amd64.tar ]] && gzip nezha-agent-amd64.tar || echo "AMD64 tar not found, skipping gzip"
-          [[ -f nezha-agent-arm64.tar ]] && gzip nezha-agent-arm64.tar || echo "ARM64 tar not found, skipping gzip"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Create GitHub Release
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
-        uses: softprops/action-gh-release@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          tag_name: ${{ env.LATEST_VERSION }}
-          files: |
-            release/nezha-agent-amd64.tar.gz
-            release/nezha-agent-arm64.tar.gz
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push (ARM64)
+        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: |
+            kanggle/nezha-agent:${{ env.LATEST_VERSION }}-arm64
+            kanggle/nezha-agent:latest-arm64
+          build-args: |
+            VERSION=${{ env.LATEST_VERSION }}
+
+  create_manifest:
+    runs-on: ubuntu-latest
+    needs: [build_amd64, build_arm64]
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker manifest create kanggle/nezha-agent:${{ env.LATEST_VERSION }} \
+            --amend kanggle/nezha-agent:${{ env.LATEST_VERSION }}-amd64 \
+            --amend kanggle/nezha-agent:${{ env.LATEST_VERSION }}-arm64
+
+          docker manifest create kanggle/nezha-agent:latest \
+            --amend kanggle/nezha-agent:latest-amd64 \
+            --amend kanggle/nezha-agent:latest-arm64
+
+          docker manifest push kanggle/nezha-agent:${{ env.LATEST_VERSION }}
+          docker manifest push kanggle/nezha-agent:latest
