@@ -1,5 +1,5 @@
 # Use multi-platform build to avoid QEMU simulation issues
-FROM --platform=$TARGETPLATFORM debian:11-slim
+FROM alpine:latest
 
 # Set non-interactive mode to prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
