@@ -1,17 +1,23 @@
 # Use debian:11-slim as the base image
 FROM debian:11-slim
 
+# Setting APT
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Set the URL for downloading the Nezha Agent
 ARG TARGETARCH
 ENV AGENT_URL=https://github.com/nezhahq/agent/releases/latest/download/nezha-agent_linux_${TARGETARCH}.zip
 
+# Update system
+RUN apt-get update && apt-get upgrade -y
+
 # Install required packages
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     unzip \
     uuid-runtime \
-    ca-certificates --no-install-recommends && \
+    ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a directory and install the Nezha Agent in one layer
