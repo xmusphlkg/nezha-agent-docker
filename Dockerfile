@@ -9,17 +9,13 @@ ARG TARGETARCH
 ARG VERSION
 ENV AGENT_URL=https://github.com/nezhahq/agent/releases/download/${VERSION}/nezha-agent_linux_${TARGETARCH}.zip
 
-# Update system and upgrade packages to prevent libc-bin issues
-RUN apt-get update && apt-get upgrade -y
-
 # Install necessary dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk add --no-cache \
     curl \
     wget \
     unzip \
-    uuid-runtime \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    uuidgen
 
 # Create the working directory for Nezha Agent
 RUN mkdir -p /usr/local/bin/nezha && cd /usr/local/bin/nezha
