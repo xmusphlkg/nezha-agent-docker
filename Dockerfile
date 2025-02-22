@@ -1,17 +1,18 @@
-# Use debian:11-slim as the base image
-FROM debian:11-slim
+# Use multi-platform build to avoid QEMU simulation issues
+FROM --platform=$TARGETPLATFORM debian:11-slim
 
-# Setting APT
+# Set non-interactive mode to prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Set the URL for downloading the Nezha Agent
+# Define architecture-based variables
 ARG TARGETARCH
-ENV AGENT_URL=https://github.com/nezhahq/agent/releases/latest/download/nezha-agent_linux_${TARGETARCH}.zip
+ARG VERSION
+ENV AGENT_URL=https://github.com/nezhahq/agent/releases/download/${VERSION}/nezha-agent_linux_${TARGETARCH}.zip
 
-# Update system
+# Update system and upgrade packages to prevent libc-bin issues
 RUN apt-get update && apt-get upgrade -y
 
-# Install required packages
+# Install necessary dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
@@ -20,21 +21,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Create a directory and install the Nezha Agent in one layer
-RUN mkdir -p /usr/local/bin/nezha && \
-    wget $AGENT_URL -O nezha-agent.zip && \
-    unzip nezha-agent.zip -d /usr/local/bin/nezha && \
-    chmod +x /usr/local/bin/nezha/nezha-agent && \
+# Create the working directory for Nezha Agent
+RUN mkdir -p /usr/local/bin/nezha && cd /usr/local/bin/nezha
+
+# Download and extract the Nezha Agent binary
+RUN wget $AGENT_URL -O nezha-agent.zip && \
+    unzip nezha-agent.zip && \
+    chmod +x nezha-agent && \
     rm -f nezha-agent.zip
 
-# Copy the setup-config script from your context into the image
+# Copy the setup configuration script
 COPY setup-config.sh /usr/local/bin/nezha/setup-config.sh
-
-# Ensure the script and agent are executable
 RUN chmod +x /usr/local/bin/nezha/setup-config.sh
 
-# Set the working directory
+# Set working directory
 WORKDIR /usr/local/bin/nezha
 
-# Set default command to first run the setup script and then start Nezha Agent
-CMD ["/bin/sh", "-c", "./setup-config.sh && ./nezha-agent -c config.yml"]
+# Set default command to execute the setup script and start the agent
+CMD ["./setup-config.sh", "&&", "./nezha-agent", "-c", "config.yml"]
