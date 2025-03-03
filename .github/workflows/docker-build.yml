@@ -38,6 +38,7 @@ jobs:
             exit 1
           fi
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+          echo "LATEST_VERSION is $LATEST_VERSION"
 
       # Build and push the multi-architecture Docker image
       - name: Build and push multi-arch Docker image
