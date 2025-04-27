@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Default values or skip setting if not provided
 CLIENT_SECRET=${CLIENT_SECRET:-""}
