@@ -29,19 +29,44 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Fetch the latest Nezha Agent release version
-      - name: Check for Nezha Agent updates
+      # Fetch the latest Nezha Agent release version and current GitHub Release version
+      - name: Check for Nezha Agent updates and current release
+        id: check_versions # Add an ID to reference outputs
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/nezhahq/agent/releases/latest | jq -r '.tag_name')
-          if [[ -z "$LATEST_VERSION" ]]; then
-            echo "Failed to get latest version" >&2
+          if [[ -z "$LATEST_VERSION" || "$LATEST_VERSION" == "null" ]]; then
+            echo "Error: Failed to get latest Nezha Agent version. LATEST_VERSION is empty or null."
             exit 1
           fi
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-          echo "LATEST_VERSION is $LATEST_VERSION"
+          echo "Latest Nezha Agent version is $LATEST_VERSION"
+
+          # Get the latest GitHub Release tag from this repository
+          CURRENT_GITHUB_RELEASE=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+          if [[ "$CURRENT_GITHUB_RELEASE" == "null" ]]; then
+              echo "No previous GitHub release found or failed to retrieve."
+              CURRENT_GITHUB_RELEASE="" # Set to empty if not found
+          fi
+          echo "CURRENT_GITHUB_RELEASE=$CURRENT_GITHUB_RELEASE" >> $GITHUB_ENV
+          echo "Current GitHub release version is $CURRENT_GITHUB_RELEASE"
+
+          # Determine if a build is needed
+          SHOULD_BUILD="false"
+          if [[ "${{ github.event.inputs.force_build }}" == "true" ]]; then
+            SHOULD_BUILD="true"
+            echo "Force build is enabled."
+          elif [[ "$LATEST_VERSION" != "$CURRENT_GITHUB_RELEASE" ]]; then
+            SHOULD_BUILD="true"
+            echo "New Nezha Agent version found ($LATEST_VERSION) or no current GitHub release."
+          else
+            echo "Nezha Agent is already at the latest version ($LATEST_VERSION) and no force build requested."
+          fi
+          echo "SHOULD_BUILD=$SHOULD_BUILD" >> $GITHUB_ENV
+          echo "should_build=$SHOULD_BUILD" >> $GITHUB_OUTPUT # Output for conditional steps
 
       # Build and push the multi-architecture Docker image
       - name: Build and push multi-arch Docker image
+        if: steps.check_versions.outputs.should_build == 'true'
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
             --build-arg VERSION=${{ env.LATEST_VERSION }} \
@@ -50,30 +75,33 @@ jobs:
             --push \
             .
 
-      # Save the Docker image as a tar archive
-      - name: Save Docker image as tar archive
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+      # Save the Docker image as a tar archive and compress
+      - name: Save Docker image as tar archive and compress
+        if: steps.check_versions.outputs.should_build == 'true'
         run: |
           mkdir -p release
+          echo "Pulling and saving linux/amd64 image..."
           docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/amd64
           docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-amd64.tar
+          gzip release/nezha-agent-amd64.tar
+
+          echo "Pulling and saving linux/arm64 image..."
           docker pull kanggle/nezha-agent:${{ env.LATEST_VERSION }} --platform linux/arm64
           docker save kanggle/nezha-agent:${{ env.LATEST_VERSION }} -o release/nezha-agent-arm64.tar
-
-      # Compress the tar archives
-      - name: Compress tar archives
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
-        run: |
-          cd release
-          gzip nezha-agent-amd64.tar
-          gzip nezha-agent-arm64.tar
+          gzip release/nezha-agent-arm64.tar
 
       # Create a new GitHub Release and upload the tar archives
       - name: Create GitHub Release
-        if: env.LATEST_VERSION != env.CURRENT_VERSION || github.event.inputs.force_build == 'true'
+        if: steps.check_versions.outputs.should_build == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.LATEST_VERSION }}
+          # Set release name to the version
+          name: Release ${{ env.LATEST_VERSION }}
+          # You might want to add some release body, e.g., changelog
+          body: |
+            Nezha Agent Docker images for version ${{ env.LATEST_VERSION }}.
+            Includes builds for linux/amd64 and linux/arm64.
           files: |
             release/nezha-agent-amd64.tar.gz
             release/nezha-agent-arm64.tar.gz
