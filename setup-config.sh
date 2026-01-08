@@ -9,16 +9,31 @@ if [ -z "$CLIENT_SECRET" ] || [ -z "$SERVER" ]; then
   echo "CLIENT_SECRET or SERVER not provided. Configuration will be set at runtime."
 fi  # Closing the if statement
 
-# Generate UUID if not provided
-if command -v uuidgen >/dev/null 2>&1; then
-  UUID=${UUID:-$(uuidgen)}
-else
-  echo "uuidgen not found, using fallback method to generate UUID."
-  UUID=${UUID:-$(cat /proc/sys/kernel/random/uuid 2>/dev/null || openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\)$/\1-\2-\3-\4-\5/') }
+# Check if config.yml exists and contains a UUID
+CONFIG_FILE="/usr/local/bin/nezha/config.yml"
+EXISTING_UUID=""
+
+if [ -f "$CONFIG_FILE" ] && [ -z "$UUID" ]; then
+  # Try to extract existing UUID from config.yml (handles quoted and unquoted values)
+  EXISTING_UUID=$(grep '^uuid:' "$CONFIG_FILE" | sed "s/^uuid:[[:space:]]*//; s/[\"']//g; s/[[:space:]]*$//")
+  if [ -n "$EXISTING_UUID" ]; then
+    echo "Found existing UUID in config.yml: $EXISTING_UUID"
+    UUID="$EXISTING_UUID"
+  fi
 fi
 
-# Print UUID
-echo "Your UUID: $UUID"
+# Generate UUID if not provided and not found in existing config
+if [ -z "$UUID" ]; then
+  if command -v uuidgen >/dev/null 2>&1; then
+    UUID=$(uuidgen)
+  else
+    echo "uuidgen not found, using fallback method to generate UUID."
+    UUID=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\)$/\1-\2-\3-\4-\5/')
+  fi
+  echo "Generated new UUID: $UUID"
+elif [ -z "$EXISTING_UUID" ]; then
+  echo "Using UUID from environment variable: $UUID"
+fi
 
 # Create config.yml with the provided or default settings
 cat <<EOF > /usr/local/bin/nezha/config.yml
