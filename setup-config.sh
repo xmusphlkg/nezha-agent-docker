@@ -14,8 +14,8 @@ CONFIG_FILE="/usr/local/bin/nezha/config.yml"
 EXISTING_UUID=""
 
 if [ -f "$CONFIG_FILE" ] && [ -z "$UUID" ]; then
-  # Try to extract existing UUID from config.yml
-  EXISTING_UUID=$(grep '^uuid:' "$CONFIG_FILE" | awk '{print $2}' | tr -d '[:space:]')
+  # Try to extract existing UUID from config.yml (handles quoted and unquoted values)
+  EXISTING_UUID=$(grep '^uuid:' "$CONFIG_FILE" | sed 's/^uuid:[[:space:]]*//; s/["\x27]//g; s/[[:space:]]*$//')
   if [ -n "$EXISTING_UUID" ]; then
     echo "Found existing UUID in config.yml: $EXISTING_UUID"
     UUID="$EXISTING_UUID"
@@ -31,15 +31,9 @@ if [ -z "$UUID" ]; then
     UUID=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || openssl rand -hex 16 | sed 's/^\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\)$/\1-\2-\3-\4-\5/')
   fi
   echo "Generated new UUID: $UUID"
-else
-  if [ "$UUID" != "$EXISTING_UUID" ] && [ -n "$EXISTING_UUID" ]; then
-    echo "Using UUID from environment variable (overriding existing): $UUID"
-  elif [ -z "$EXISTING_UUID" ]; then
-    echo "Using UUID from environment variable: $UUID"
-  fi
+elif [ -z "$EXISTING_UUID" ]; then
+  echo "Using UUID from environment variable: $UUID"
 fi
-
-
 
 # Create config.yml with the provided or default settings
 cat <<EOF > /usr/local/bin/nezha/config.yml
