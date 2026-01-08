@@ -15,7 +15,7 @@ EXISTING_UUID=""
 
 if [ -f "$CONFIG_FILE" ] && [ -z "$UUID" ]; then
   # Try to extract existing UUID from config.yml (handles quoted and unquoted values)
-  EXISTING_UUID=$(grep '^uuid:' "$CONFIG_FILE" | sed 's/^uuid:[[:space:]]*//; s/["\x27]//g; s/[[:space:]]*$//')
+  EXISTING_UUID=$(grep '^uuid:' "$CONFIG_FILE" | sed "s/^uuid:[[:space:]]*//; s/[\"']//g; s/[[:space:]]*$//")
   if [ -n "$EXISTING_UUID" ]; then
     echo "Found existing UUID in config.yml: $EXISTING_UUID"
     UUID="$EXISTING_UUID"
