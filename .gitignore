@@ -8,5 +8,12 @@ ctm-console/web/dist/
 ctm-console/web/*.tsbuildinfo
 ctm-console/web/vite.config.js
 ctm-console/web/vite.config.d.ts
+switch-topology/api/.venv/
+switch-topology/api/.pytest_cache/
+switch-topology/web/node_modules/
+switch-topology/web/dist/
+switch-topology/web/*.tsbuildinfo
+switch-topology/web/vite.config.js
+switch-topology/web/vite.config.d.ts
 __pycache__/
 *.pyc

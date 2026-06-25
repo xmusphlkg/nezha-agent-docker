@@ -1,5 +1,6 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import {
   Activity,
   BadgeCheck,
@@ -27,11 +28,23 @@ const filterLabels: Record<LanFilter, string> = {
 };
 
 export function LanPage() {
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<LanFilter>('online');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') || '';
+  const filterQuery = parseFilter(searchParams.get('filter'));
+  const [search, setSearch] = useState(searchQuery);
+  const [filter, setFilter] = useState<LanFilter>(filterQuery);
   const lan = useQuery({ queryKey: ['lan'], queryFn: api.lan });
   const grafana = useQuery({ queryKey: ['grafana'], queryFn: api.grafana });
   const lanDashboard = grafana.data?.dashboards.find((dashboard) => dashboard.id === 'lan');
+
+  useEffect(() => {
+    setSearch(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setFilter(filterQuery);
+  }, [filterQuery]);
+
   const rows = useMemo(() => {
     if (!lan.data) return [];
     const query = search.trim().toLowerCase();
@@ -131,7 +144,7 @@ export function LanPage() {
                 className={filter === value ? 'active' : ''}
                 type="button"
                 key={value}
-                onClick={() => setFilter(value)}
+                onClick={() => updateFilter(value, searchParams, setSearchParams, setFilter)}
               >
                 {filterLabels[value]}
                 <b>{filterCount(data, value)}</b>
@@ -139,7 +152,7 @@ export function LanPage() {
             ))}
           </div>
         </div>
-        <SearchInput value={search} onChange={setSearch} placeholder="搜索 IP、MAC、名称" />
+        <SearchInput value={search} onChange={(value) => updateSearch(value, searchParams, setSearchParams, setSearch)} placeholder="搜索 IP、MAC、名称" />
       </section>
 
       <section className="security-panel lan-panel">
@@ -242,6 +255,43 @@ function interfaceText(data: LanSummary) {
   if (!data.interfaces.length) return '无接口数据';
   if (data.interfaces.length <= 2) return data.interfaces.join(' / ');
   return `${data.interfaces.slice(0, 2).join(' / ')} +${data.interfaces.length - 2}`;
+}
+
+function parseFilter(value: string | null): LanFilter {
+  if (value === 'unknown-online' || value === 'known' || value === 'all') return value;
+  return 'online';
+}
+
+function updateSearch(
+  value: string,
+  searchParams: URLSearchParams,
+  setSearchParams: ReturnType<typeof useSearchParams>[1],
+  setSearch: (value: string) => void,
+) {
+  setSearch(value);
+  const next = new URLSearchParams(searchParams);
+  if (value.trim()) {
+    next.set('q', value);
+  } else {
+    next.delete('q');
+  }
+  setSearchParams(next, { replace: true });
+}
+
+function updateFilter(
+  value: LanFilter,
+  searchParams: URLSearchParams,
+  setSearchParams: ReturnType<typeof useSearchParams>[1],
+  setFilter: (value: LanFilter) => void,
+) {
+  setFilter(value);
+  const next = new URLSearchParams(searchParams);
+  if (value === 'online') {
+    next.delete('filter');
+  } else {
+    next.set('filter', value);
+  }
+  setSearchParams(next, { replace: true });
 }
 
 function deviceTitle(device: LanDevice) {

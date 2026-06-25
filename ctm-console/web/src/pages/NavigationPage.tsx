@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   Activity,
@@ -63,9 +64,35 @@ const iconTones: Record<NavIconName, string> = {
 
 export function NavigationPage() {
   const links = useQuery({ queryKey: ['nav', 'links'], queryFn: () => api.navLinks(false) });
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('全部');
-  const [tag, setTag] = useState('全部');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const queryParam = searchParams.get('q') || '';
+  const categoryParam = searchParams.get('category') || '全部';
+  const tagParam = searchParams.get('tag') || '全部';
+  const focusParam = searchParams.get('focus') || '';
+  const [query, setQuery] = useState(queryParam);
+  const [category, setCategory] = useState(categoryParam);
+  const [tag, setTag] = useState(tagParam);
+
+  useEffect(() => {
+    setQuery(queryParam);
+  }, [queryParam]);
+
+  useEffect(() => {
+    setCategory(categoryParam);
+  }, [categoryParam]);
+
+  useEffect(() => {
+    setTag(tagParam);
+  }, [tagParam]);
+
+  useEffect(() => {
+    if (focusParam !== 'search' || !inputRef.current || links.isLoading) return;
+    inputRef.current.focus();
+    const next = new URLSearchParams(searchParams);
+    next.delete('focus');
+    setSearchParams(next, { replace: true });
+  }, [focusParam, links.isLoading, searchParams, setSearchParams]);
 
   const model = useMemo(() => {
     const items = links.data ?? [];
@@ -80,6 +107,43 @@ export function NavigationPage() {
     });
     return { categories, tags, filtered };
   }, [links.data, query, category, tag]);
+  const favoriteItems = model.filtered.filter((item) => item.favorite);
+
+  function updateQuery(value: string) {
+    setQuery(value);
+    const next = new URLSearchParams(searchParams);
+    if (value.trim()) {
+      next.set('q', value);
+    } else {
+      next.delete('q');
+    }
+    next.delete('focus');
+    setSearchParams(next, { replace: true });
+  }
+
+  function updateCategory(value: string) {
+    setCategory(value);
+    const next = new URLSearchParams(searchParams);
+    if (value === '全部') {
+      next.delete('category');
+    } else {
+      next.set('category', value);
+    }
+    next.delete('focus');
+    setSearchParams(next, { replace: true });
+  }
+
+  function updateTag(value: string) {
+    setTag(value);
+    const next = new URLSearchParams(searchParams);
+    if (value === '全部') {
+      next.delete('tag');
+    } else {
+      next.set('tag', value);
+    }
+    next.delete('focus');
+    setSearchParams(next, { replace: true });
+  }
 
   if (links.isLoading) return <div className="loading-screen">加载导航</div>;
   if (links.isError) {
@@ -107,11 +171,11 @@ export function NavigationPage() {
       <section className="nav-controls">
         <label className="nav-search">
           <Search size={18} />
-          <input value={query} placeholder="搜索名称、地址、标签" onChange={(event) => setQuery(event.target.value)} />
+          <input ref={inputRef} value={query} placeholder="搜索名称、地址、标签" onChange={(event) => updateQuery(event.target.value)} />
         </label>
         <label className="nav-filter">
           <Filter size={17} />
-          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+          <select value={category} onChange={(event) => updateCategory(event.target.value)}>
             {model.categories.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -121,7 +185,7 @@ export function NavigationPage() {
         </label>
         <label className="nav-filter">
           <Filter size={17} />
-          <select value={tag} onChange={(event) => setTag(event.target.value)}>
+          <select value={tag} onChange={(event) => updateTag(event.target.value)}>
             {model.tags.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -131,26 +195,28 @@ export function NavigationPage() {
         </label>
       </section>
 
-      <section className="nav-section">
-        <div className="nav-section-heading">
-          <h2>常用入口</h2>
-          <span>{model.filtered.filter((item) => item.favorite).length}</span>
-        </div>
-        <div className="nav-link-grid">
-          {model.filtered.filter((item) => item.favorite).map((item) => (
-            <NavCard key={item.id} item={item} />
-          ))}
-        </div>
-      </section>
+      {favoriteItems.length > 0 && (
+        <section className="nav-shortcuts">
+          <div className="nav-section-heading">
+            <h2>常用入口</h2>
+            <span>{favoriteItems.length}</span>
+          </div>
+          <div className="nav-shortcut-row">
+            {favoriteItems.map((item) => (
+              <NavShortcut key={item.id} item={item} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="nav-section">
         <div className="nav-section-heading">
           <h2>全部入口</h2>
           <span>{model.filtered.length}</span>
         </div>
-        <div className="nav-link-grid">
+        <div className="nav-entry-grid">
           {model.filtered.map((item) => (
-            <NavCard key={item.id} item={item} />
+            <NavEntry key={item.id} item={item} />
           ))}
           {!model.filtered.length && <div className="nav-empty">没有匹配的导航入口</div>}
         </div>
@@ -159,36 +225,52 @@ export function NavigationPage() {
   );
 }
 
-function NavCard({ item }: { item: NavLink }) {
+function NavShortcut({ item }: { item: NavLink }) {
   const hostname = displayHost(item.url);
   const iconName = iconNameForLink(item);
   const Icon = iconComponents[iconName];
   return (
-    <a className={`nav-card ${item.status}`} href={appHref(item.url)} target={item.url.startsWith('/') ? undefined : '_blank'} rel="noreferrer">
-      <div className="nav-card-top">
-        <span className={`nav-card-icon tone-${iconTones[iconName]}`}>
-          <Icon size={18} strokeWidth={2.25} />
-        </span>
-        <span className="nav-card-status">{statusText(item)}</span>
-      </div>
+    <a className={`nav-shortcut ${item.status}`} href={appHref(item.url)} target={item.url.startsWith('/') ? undefined : '_blank'} rel="noreferrer">
+      <span className={`nav-shortcut-icon tone-${iconTones[iconName]}`}>
+        <Icon size={13} strokeWidth={2.4} />
+      </span>
       <strong>{item.title}</strong>
-      <p>{item.description || hostname}</p>
-      <div className="nav-card-meta">
-        <span>{item.category}</span>
-        <span>{hostname}</span>
+      <span className="nav-shortcut-status">{statusText(item)}</span>
+      <small>{hostname}</small>
+    </a>
+  );
+}
+
+function NavEntry({ item }: { item: NavLink }) {
+  const hostname = displayHost(item.url);
+  const iconName = iconNameForLink(item);
+  const Icon = iconComponents[iconName];
+  return (
+    <a className={`nav-entry ${item.status}`} href={appHref(item.url)} target={item.url.startsWith('/') ? undefined : '_blank'} rel="noreferrer">
+      <span className={`nav-entry-icon tone-${iconTones[iconName]}`}>
+        <Icon size={18} strokeWidth={2.25} />
+      </span>
+      <div className="nav-entry-body">
+        <div className="nav-entry-head">
+          <strong>{item.title}</strong>
+          <span className="nav-entry-status">{statusText(item)}</span>
+        </div>
+        <p>{item.description || hostname}</p>
+        <div className="nav-entry-meta">
+          <span>{item.category}</span>
+          <span>{hostname}</span>
+          {item.favorite && (
+            <span>
+              <Heart size={12} />
+              常用
+            </span>
+          )}
+          {item.tags.slice(0, 4).map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
       </div>
-      <div className="nav-card-tags">
-        {item.favorite && (
-          <span>
-            <Heart size={12} />
-            常用
-          </span>
-        )}
-        {item.tags.slice(0, 4).map((tag) => (
-          <span key={tag}>{tag}</span>
-        ))}
-      </div>
-      <ExternalLink className="nav-card-open" size={16} />
+      <ExternalLink className="nav-entry-open" size={16} />
     </a>
   );
 }

@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useSearchParams, useParams } from 'react-router-dom';
 import {
   Activity,
   ArrowLeft,
@@ -29,7 +29,8 @@ import type { Health, Machine, MachineSecurity, Problem, WazuhRecentEvent } from
 
 export function MachineDetailPage() {
   const { id = '' } = useParams();
-  const [range, setRange] = useState<'1h' | '6h' | '24h'>('1h');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const range = parseRange(searchParams.get('range'));
   const detail = useQuery({ queryKey: ['machine', id], queryFn: () => api.machine(id), enabled: Boolean(id) });
   const series = useQuery({
     queryKey: ['machine-series', id, range],
@@ -108,7 +109,7 @@ export function MachineDetailPage() {
           <h2>资源趋势</h2>
           <div className="segmented">
             {(['1h', '6h', '24h'] as const).map((item) => (
-              <button key={item} type="button" className={range === item ? 'active' : ''} onClick={() => setRange(item)}>
+              <button key={item} type="button" className={range === item ? 'active' : ''} onClick={() => updateRange(setSearchParams, item)}>
                 {item}
               </button>
             ))}
@@ -462,4 +463,20 @@ function eventTitle(event: WazuhRecentEvent) {
 function eventMeta(event: WazuhRecentEvent) {
   if (event.kind === 'ssh') return [event.agentName, event.srcip, event.description].filter(Boolean).join(' / ') || '—';
   return [event.agentName, event.ruleId, event.description].filter(Boolean).join(' / ') || '—';
+}
+
+function parseRange(value: string | null): '1h' | '6h' | '24h' {
+  if (value === '6h' || value === '24h') return value;
+  return '1h';
+}
+
+function updateRange(
+  setSearchParams: ReturnType<typeof useSearchParams>[1],
+  range: '1h' | '6h' | '24h',
+) {
+  const next = new URLSearchParams();
+  if (range !== '1h') {
+    next.set('range', range);
+  }
+  setSearchParams(next, { replace: true });
 }

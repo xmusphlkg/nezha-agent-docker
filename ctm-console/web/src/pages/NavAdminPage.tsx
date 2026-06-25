@@ -299,9 +299,13 @@ export function NavAdminPage() {
           <div className="admin-table">
             {(links.data ?? []).map((item) => (
               <div className={item.enabled ? 'admin-row' : 'admin-row disabled'} key={item.id}>
-                <div>
-                  <strong>{item.title}</strong>
+                <div className="admin-row-main">
+                  <div className="admin-row-title">
+                    <strong>{item.title}</strong>
+                    {!item.enabled && <span className="admin-row-pill">停用</span>}
+                  </div>
                   <span>{item.category} · {item.url}</span>
+                  <small className="admin-row-tags">{item.tags.slice(0, 3).join(' / ')}</small>
                 </div>
                 <div className="admin-row-actions">
                   <a className="icon-button" href={appHref(item.url)} target={item.url.startsWith('/') ? undefined : '_blank'} rel="noreferrer">
@@ -346,18 +350,20 @@ export function NavAdminPage() {
             ))}
           </select>
         </div>
-        <div className="candidate-grid">
+        <div className="candidate-list">
           {candidateModel.filtered.map((item) => (
-            <article className="candidate-card" key={item.id}>
+            <article className="candidate-item" key={item.id}>
               <div>
-                <strong>{item.title}</strong>
-                <span>{item.url}</span>
-              </div>
-              <p>{item.suggestionReason || `${item.host}:${item.port}`}</p>
-              <div className="candidate-meta">
-                <span>{item.category}</span>
-                {item.statusCode && <span>HTTP {item.statusCode}</span>}
-                {item.serverHeader && <span>{item.serverHeader}</span>}
+                <div className="candidate-item-header">
+                  <strong>{item.title}</strong>
+                  <span>{item.category}</span>
+                </div>
+                <span className="candidate-url">{item.url}</span>
+                <p>{item.suggestionReason || `${item.host}:${item.port}`}</p>
+                <div className="candidate-meta candidate-item-meta">
+                  {item.statusCode && <span>HTTP {item.statusCode}</span>}
+                  {item.serverHeader && <span>{item.serverHeader}</span>}
+                </div>
               </div>
               <div className="candidate-actions">
                 <a href={item.url} target="_blank" rel="noreferrer">

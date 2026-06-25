@@ -1,6 +1,6 @@
-import { Activity, Check, Clock3, LogIn, LogOut, Navigation, Network, Settings } from 'lucide-react';
+import { Activity, Check, Clock3, LogIn, LogOut, Navigation, Network, RefreshCw, Search, Settings } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { dateTime } from '../lib/format';
@@ -23,6 +23,7 @@ export function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   const overview = useQuery({ queryKey: ['overview'], queryFn: api.overview });
   const online = overview.data?.machines.filter(isOnline).length ?? 0;
   const total = overview.data?.machines.length ?? 0;
@@ -33,6 +34,19 @@ export function Layout() {
   };
   const onLogin = () => {
     navigate('/nav/admin');
+  };
+  const onSearch = () => {
+    if (location.pathname === '/') {
+      const next = new URLSearchParams(location.search);
+      next.set('focus', 'search');
+      const search = next.toString();
+      navigate({ pathname: '/', search: search ? `?${search}` : '' });
+      return;
+    }
+    navigate('/?focus=search');
+  };
+  const onRefresh = async () => {
+    await queryClient.invalidateQueries();
   };
 
   return (
@@ -63,6 +77,15 @@ export function Layout() {
             管理
           </NavLink>
         </nav>
+
+        <div className="header-actions" aria-label="快捷操作">
+          <button className="icon-button header-action" type="button" title="全局搜索" aria-label="全局搜索" onClick={onSearch}>
+            <Search size={15} />
+          </button>
+          <button className="icon-button header-action" type="button" title="刷新数据" aria-label="刷新数据" onClick={() => void onRefresh()}>
+            <RefreshCw size={15} />
+          </button>
+        </div>
 
         <div className="header-status">
           <span className="header-sync">
