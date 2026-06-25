@@ -3,13 +3,13 @@
 Lightweight infrastructure monitor for the internal network. It presents compact
 sub-panels for Zabbix hosts and optional PVE VM/CT resources.
 
-Runtime state is stored in the existing MySQL on `192.168.3.222`. The app runs with
+Runtime state is stored in the configured MySQL host. The app runs with
 host networking and creates a small `ctm_console_cache` KV table in the `dashboard`
 database for snapshots and short series cache.
 
 ## Run on 8088
 
-Prepare MySQL on `192.168.3.222` so the API container can connect to it locally:
+Prepare MySQL for your configured `MYSQL_*` values so the API container can connect to it locally:
 
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, ALTER
@@ -24,7 +24,7 @@ chmod 600 .env
 docker compose up -d --build
 ```
 
-Open `http://192.168.3.222:8088`.
+Open `${PUBLIC_BASE_URL}` after editing `.env` (default is `http://127.0.0.1:8088`).
 
 Required `.env` fields:
 
@@ -45,6 +45,8 @@ Navigation/login fields:
 - `CTM_SESSION_TTL_HOURS=12`
 - `NAV_SCAN_CIDRS=192.168.3.0/24`
 - `NAV_SCAN_PORTS=80,443,3000,3001,5000,5001,5173,5601,8000,8006,8080,8081,8088,8090,8443,8888,9000,9001,9090,9091,9093,9200,9443`
+- `VITE_NAV_SCAN_CIDRS_DEFAULT=192.168.3.0/24`
+- `VITE_NAV_SCAN_CIDRS_PLACEHOLDER=192.168.3.0/24, 192.168.10.0/24`
 
 The first startup creates the initial admin user if `ctm_nav_users` is empty.
 Keep the admin password and session secret only in `.env`.
@@ -81,7 +83,7 @@ when the console should only read part of the Wazuh exporter metrics from Promet
 
 Optional Grafana integration field:
 
-- `GRAFANA_BASE_URL=http://192.168.30.91:30037`
+- `GRAFANA_BASE_URL=http://127.0.0.1:3000`
 - `GRAFANA_ORG_ID=1`
 - `GRAFANA_DEFAULT_FROM=now-6h`
 - `GRAFANA_DEFAULT_TO=now`
@@ -100,7 +102,8 @@ console port and Grafana port do not need to compete with each other.
 
 ```bash
 sed -i 's/CTM_CONSOLE_PORT=8088/CTM_CONSOLE_PORT=3030/' .env
-sed -i 's#PUBLIC_BASE_URL=http://192.168.3.222:8088#PUBLIC_BASE_URL=http://192.168.3.222/console#' .env
+sed -i 's#PUBLIC_BASE_URL=http://127.0.0.1:8088#PUBLIC_BASE_URL=http://192.168.3.222/console#' .env
+echo 'VITE_API_PROXY=http://127.0.0.1:8088' >> .env
 echo 'VITE_BASE_PATH=/console/' >> .env
 docker compose up -d
 ```

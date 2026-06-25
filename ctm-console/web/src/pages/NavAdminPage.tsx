@@ -5,6 +5,9 @@ import { api } from '../lib/api';
 import { appHref } from '../lib/paths';
 import type { DiscoveryRun, NavCandidate, NavLink, NavLinkInput, NavLinkPatch, NavLinkPreview } from '../types';
 
+const DEFAULT_SCAN_CIDRS = (import.meta.env.VITE_NAV_SCAN_CIDRS_DEFAULT ?? '192.168.3.0/24').trim();
+const SCAN_CIDR_PLACEHOLDER = (import.meta.env.VITE_NAV_SCAN_CIDRS_PLACEHOLDER ?? '192.168.3.0/24, 192.168.10.0/24').trim();
+
 const emptyForm: NavLinkInput = {
   title: '',
   url: '',
@@ -26,7 +29,7 @@ export function NavAdminPage() {
   const [form, setForm] = useState<NavLinkInput>(emptyForm);
   const [tagText, setTagText] = useState('');
   const [run, setRun] = useState<DiscoveryRun | null>(null);
-  const [scanCidrText, setScanCidrText] = useState('192.168.3.0/24');
+  const [scanCidrText, setScanCidrText] = useState(DEFAULT_SCAN_CIDRS);
   const [lastPreviewUrl, setLastPreviewUrl] = useState('');
   const [candidateQuery, setCandidateQuery] = useState('');
   const [candidateCategory, setCandidateCategory] = useState('全部');
@@ -191,7 +194,7 @@ export function NavAdminPage() {
             <span>扫描 IP 段</span>
             <input
               value={scanCidrText}
-              placeholder="192.168.3.0/24, 192.168.10.0/24"
+              placeholder={SCAN_CIDR_PLACEHOLDER}
               onChange={(event) => setScanCidrText(event.target.value)}
             />
           </label>

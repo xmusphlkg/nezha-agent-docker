@@ -18,7 +18,7 @@ services:
       MYSQL_TABLE: ${MYSQL_TABLE:-ctm_console_cache}
       ZABBIX_URL: ${ZABBIX_URL:-http://127.0.0.1:8080/api_jsonrpc.php}
       PROMETHEUS_URL: ${PROMETHEUS_URL:-http://127.0.0.1:9090}
-      GRAFANA_BASE_URL: ${GRAFANA_BASE_URL:-http://192.168.30.91:30037}
+      GRAFANA_BASE_URL: ${GRAFANA_BASE_URL:-http://127.0.0.1:3000}
       GRAFANA_ORG_ID: ${GRAFANA_ORG_ID:-1}
       GRAFANA_DEFAULT_FROM: ${GRAFANA_DEFAULT_FROM:-now-6h}
       GRAFANA_DEFAULT_TO: ${GRAFANA_DEFAULT_TO:-now}
@@ -29,7 +29,7 @@ services:
       CTM_WAZUH_WINDOW: ${CTM_WAZUH_WINDOW:-24h}
       CTM_WAZUH_TOP_LIMIT: ${CTM_WAZUH_TOP_LIMIT:-8}
       CTM_WAZUH_RECENT_LIMIT: ${CTM_WAZUH_RECENT_LIMIT:-12}
-      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://192.168.3.222:8088}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:8088}
     network_mode: host
     restart: unless-stopped
     mem_limit: 512m

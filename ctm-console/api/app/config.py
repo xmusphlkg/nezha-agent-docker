@@ -13,9 +13,9 @@ class Settings(BaseSettings):
 
     app_name: str = "CTM Console"
     environment: Literal["dev", "prod", "test"] = "prod"
-    public_base_url: str = "http://192.168.3.222:3000"
+    public_base_url: str = "http://127.0.0.1:8088"
 
-    mysql_host: str = "192.168.3.222"
+    mysql_host: str = "127.0.0.1"
     mysql_port: int = 3306
     mysql_user: str = "ctm_console"
     mysql_password: str | None = None
@@ -23,18 +23,18 @@ class Settings(BaseSettings):
     mysql_table: str = "ctm_console_cache"
     mysql_connect_timeout_sec: int = 10
 
-    zabbix_url: str = "http://host.docker.internal:8080/api_jsonrpc.php"
+    zabbix_url: str = "http://127.0.0.1:8080/api_jsonrpc.php"
     zabbix_token: str | None = None
     zabbix_user: str | None = None
     zabbix_password: str | None = None
     zabbix_timeout_sec: float = 10.0
     zabbix_concurrency: int = 4
 
-    prometheus_url: str = "http://host.docker.internal:9090"
+    prometheus_url: str = "http://127.0.0.1:9090"
     prometheus_timeout_sec: float = 10.0
     prometheus_concurrency: int = 4
 
-    grafana_base_url: str = "http://192.168.30.91:30037"
+    grafana_base_url: str = "http://127.0.0.1:3000"
     grafana_org_id: int | None = 1
     grafana_default_from: str | None = "now-6h"
     grafana_default_to: str | None = "now"
@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     ctm_session_secret: str | None = None
     ctm_session_ttl_hours: int = 12
 
-    nav_scan_cidrs: str = "192.168.3.0/24"
+    nav_scan_cidrs: str = "192.168.1.0/24"
     nav_scan_ports: str = (
         "80,443,3000,3001,5000,5001,5173,5601,8000,8006,8080,8081,"
         "8088,8090,8443,8888,9000,9001,9090,9091,9093,9200,9443"

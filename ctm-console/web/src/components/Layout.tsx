@@ -1,5 +1,5 @@
 import { Activity, Check, Clock3, LogIn, LogOut, Navigation, Network, Settings } from 'lucide-react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useAuth } from '../lib/auth';
@@ -22,9 +22,11 @@ function hasAnyMetric(machine: Machine) {
 export function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const overview = useQuery({ queryKey: ['overview'], queryFn: api.overview });
   const online = overview.data?.machines.filter(isOnline).length ?? 0;
   const total = overview.data?.machines.length ?? 0;
+  const isAdminRoute = location.pathname.startsWith('/nav/admin');
   const onLogout = async () => {
     await logout();
     navigate('/');
@@ -67,10 +69,6 @@ export function Layout() {
             <Clock3 size={15} />
             {overview.data ? dateTime(overview.data.generatedAt) : '同步中'}
           </span>
-          <span className="header-chip" title="数据源">
-            <Activity size={15} />
-            {overview.data ? `${overview.data.sourceStatuses.filter((source) => source.ok).length}/${overview.data.sourceStatuses.length} 数据源` : '数据源'}
-          </span>
           <span className="online-pill">
             <Check size={15} />
             {online}/{total} 在线
@@ -81,12 +79,12 @@ export function Layout() {
               <span>{user.displayName || user.username}</span>
               <LogOut size={15} />
             </button>
-          ) : (
+          ) : !isAdminRoute ? (
             <button className="user-menu" type="button" onClick={onLogin} title="管理登录">
               <span>管理登录</span>
               <LogIn size={15} />
             </button>
-          )}
+          ) : null}
         </div>
       </header>
 
