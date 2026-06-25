@@ -1,0 +1,78 @@
+# Append these jobs to prometheus.yml after the currently working headscale jobs.
+# The Blackbox jobs use file_sd so new Zabbix devices appear automatically after
+# generate-zabbix-blackbox-file-sd.py refreshes the target files.
+
+- job_name: blackbox-zabbix-file-sd
+  scrape_interval: 30s
+  metrics_path: /probe
+  params:
+    module: [icmp]
+  file_sd_configs:
+    - files:
+        - /etc/prometheus/file_sd/zabbix-blackbox-icmp.json
+      refresh_interval: 5m
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 172.19.0.1:9115
+
+- job_name: blackbox-core-http
+  scrape_interval: 30s
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  file_sd_configs:
+    - files:
+        - /etc/prometheus/file_sd/core-http.json
+      refresh_interval: 5m
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 172.19.0.1:9115
+
+- job_name: watchyourlan
+  scrape_interval: 60s
+  static_configs:
+    - targets:
+        - 192.168.30.185:8840
+      labels:
+        area: lan
+        role: asset-discovery
+
+- job_name: snmp-network
+  scrape_interval: 60s
+  metrics_path: /snmp
+  params:
+    module: [if_mib]
+  static_configs:
+    - targets: []
+      labels:
+        role: network-device
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 127.0.0.1:9116
+
+- job_name: ipmi-physical
+  scrape_interval: 60s
+  metrics_path: /ipmi
+  static_configs:
+    - targets: []
+      labels:
+        role: physical-server
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 127.0.0.1:9290

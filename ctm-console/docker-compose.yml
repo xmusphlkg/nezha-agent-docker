@@ -1,0 +1,43 @@
+name: ctm-console
+
+services:
+  ctm-console-api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      args:
+        VITE_BASE_PATH: ${VITE_BASE_PATH:-/}
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST:-127.0.0.1}
+      MYSQL_PORT: ${MYSQL_PORT:-3306}
+      MYSQL_USER: ${MYSQL_USER:-dashboard}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-dashboard}
+      MYSQL_TABLE: ${MYSQL_TABLE:-ctm_console_cache}
+      ZABBIX_URL: ${ZABBIX_URL:-http://127.0.0.1:8080/api_jsonrpc.php}
+      PROMETHEUS_URL: ${PROMETHEUS_URL:-http://127.0.0.1:9090}
+      GRAFANA_BASE_URL: ${GRAFANA_BASE_URL:-http://192.168.30.91:30037}
+      GRAFANA_ORG_ID: ${GRAFANA_ORG_ID:-1}
+      GRAFANA_DEFAULT_FROM: ${GRAFANA_DEFAULT_FROM:-now-6h}
+      GRAFANA_DEFAULT_TO: ${GRAFANA_DEFAULT_TO:-now}
+      GRAFANA_TIMEZONE: ${GRAFANA_TIMEZONE:-browser}
+      GRAFANA_REFRESH: ${GRAFANA_REFRESH:-30s}
+      CTM_WAZUH_ENABLED: ${CTM_WAZUH_ENABLED:-false}
+      CTM_WAZUH_MODULES: ${CTM_WAZUH_MODULES:-agents,alerts,ssh,fim}
+      CTM_WAZUH_WINDOW: ${CTM_WAZUH_WINDOW:-24h}
+      CTM_WAZUH_TOP_LIMIT: ${CTM_WAZUH_TOP_LIMIT:-8}
+      CTM_WAZUH_RECENT_LIMIT: ${CTM_WAZUH_RECENT_LIMIT:-12}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://192.168.3.222:8088}
+    network_mode: host
+    restart: unless-stopped
+    mem_limit: 512m
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python -c "import os, urllib.request; urllib.request.urlopen('http://127.0.0.1:%s/healthz' % os.getenv('CTM_CONSOLE_PORT', '8088'), timeout=2).read()"
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

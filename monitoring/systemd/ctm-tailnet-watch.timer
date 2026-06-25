@@ -1,0 +1,12 @@
+[Unit]
+Description=Run CTM Tailnet change notification watcher every 5 minutes
+
+[Timer]
+OnBootSec=2m
+OnUnitActiveSec=5m
+AccuracySec=30s
+Persistent=true
+Unit=ctm-tailnet-watch.service
+
+[Install]
+WantedBy=timers.target

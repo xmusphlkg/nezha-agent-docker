@@ -1,0 +1,3061 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "CTM Dashboards",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Main",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-ops-overview"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "设备健康",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-zabbix-operations"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "资源容量",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-zabbix-resources"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "远程网络",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-tailnet-headscale"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "服务可达",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-service-blackbox"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "告警安全",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-alerts-security"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "SSH 登录",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-wazuh-ssh"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "关键文件",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-wazuh-fim"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "全量排障",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/ctm-unified-infra"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "celyko2uw5r0gb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 101,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "problems",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "$zbx_group"
+          },
+          "host": {
+            "filter": "$zbx_host"
+          },
+          "item": {
+            "filter": ""
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "mode": 5,
+          "options": {
+            "acknowledged": 2,
+            "count": true,
+            "disableDataAlignment": true,
+            "hostProxy": false,
+            "hostsInMaintenance": false,
+            "limit": 1001,
+            "minSeverity": 0,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "sortProblems": "severity",
+            "useTimeRange": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "5",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "showProblems": "problems",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "target": "",
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 0
+          }
+        }
+      ],
+      "title": "Zabbix 未恢复",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 3,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 102,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "sum(headscale_nodes_online{user=~\"$tailnet_user\", name=~\"$tailnet_node\"})",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Tailnet 在线",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 103,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "count(headscale_nodes_online{user=~\"$tailnet_user\", name=~\"$tailnet_node\"} == 0) or vector(0)",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Tailnet 离线",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "green",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percent",
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 9,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 105,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "100 * sum(headscale_nodes_online{user=~\"$tailnet_user\", name=~\"$tailnet_node\"}) / count(headscale_nodes_info{user=~\"$tailnet_user\", name=~\"$tailnet_node\"})",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Tailnet 在线率",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 106,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "max(headscale_up)",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Headscale API",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 107,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "max(headscale_health_database_connectivity)",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Headscale DB",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 108,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "sum(headscale_nodes_available_routes) - sum(headscale_nodes_approved_routes) or vector(0)",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "未批准路由",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 21,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "id": 109,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "count((headscale_preauthkeys_expiration_timestamp - time() < 7*24*3600) and (headscale_preauthkeys_expiration_timestamp - time() > 0)) or vector(0)",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "7天过期Key",
+      "type": "stat",
+      "timeFrom": "5m",
+      "timeShift": null
+    },
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "celyko2uw5r0gb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "服务器"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "查看机器详情",
+                    "url": "/d/ctm-server-trends/ctm-server-trends?var-machine=${__value.raw}&from=now-6h&to=now",
+                    "targetBlank": true,
+                    "oneClick": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "健康状态"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "DOWN",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 60
+                    },
+                    {
+                      "color": "orange",
+                      "value": 80
+                    },
+                    {
+                      "color": "red",
+                      "value": 90
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存 %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 70
+                    },
+                    {
+                      "color": "orange",
+                      "value": 85
+                    },
+                    {
+                      "color": "red",
+                      "value": 95
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "最高温度"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "最高温度"
+              },
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "custom.width",
+                "value": 104
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 45
+                    },
+                    {
+                      "color": "orange",
+                      "value": 60
+                    },
+                    {
+                      "color": "red",
+                      "value": 75
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络速率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bps"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 100000000
+                    },
+                    {
+                      "color": "orange",
+                      "value": 1000000000
+                    },
+                    {
+                      "color": "red",
+                      "value": 5000000000
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "硬盘使用率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 70
+                    },
+                    {
+                      "color": "orange",
+                      "value": 85
+                    },
+                    {
+                      "color": "red",
+                      "value": 95
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 16,
+        "h": 9
+      },
+      "id": 201,
+      "maxDataPoints": 300,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "System"
+          },
+          "host": {
+            "filter": "/^sys_/"
+          },
+          "item": {
+            "filter": "/CPU utilization|Memory utilization/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "/.*/"
+          },
+          "host": {
+            "filter": "/^(sys|phy)_/"
+          },
+          "item": {
+            "filter": "/Zabbix agent ping|ICMP ping/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "System"
+          },
+          "host": {
+            "filter": "/^sys_/"
+          },
+          "item": {
+            "filter": "/Bits received|Bits sent/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "N",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "System"
+          },
+          "host": {
+            "filter": "/^sys_/"
+          },
+          "item": {
+            "filter": "/FS .*Space: Used$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "U",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "System"
+          },
+          "host": {
+            "filter": "/^sys_/"
+          },
+          "item": {
+            "filter": "/FS .*Space: Total/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "T",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "/.*/"
+          },
+          "host": {
+            "filter": "/^phy_/"
+          },
+          "item": {
+            "filter": "/Temp Value|Temperature/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "P",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "服务器健康总表",
+      "transformations": [
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "A"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-A-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "groupingToMatrix",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-A-/"
+          },
+          "options": {
+            "rowField": "host",
+            "columnField": "item",
+            "valueField": "Last *",
+            "emptyValue": null
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "H"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-H-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-H-/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "min"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-H-/"
+          },
+          "options": {
+            "renameByName": {
+              "Last * (min)": "健康状态"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "N"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-N-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "filterByValue",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-N-/"
+          },
+          "options": {
+            "filters": [
+              {
+                "fieldName": "item",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "docker|veth|br-|virbr|loopback|Loopback|lo:"
+                  }
+                }
+              }
+            ],
+            "type": "exclude",
+            "match": "any"
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-N-/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-N-/"
+          },
+          "options": {
+            "renameByName": {
+              "Last * (sum)": "网络速率"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "U"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-U-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "filterByValue",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-U-/"
+          },
+          "options": {
+            "filters": [
+              {
+                "fieldName": "item",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "snap|tmpfs|devtmpfs|overlay|docker|container"
+                  }
+                }
+              }
+            ],
+            "type": "exclude",
+            "match": "any"
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-U-/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-U-/"
+          },
+          "options": {
+            "renameByName": {
+              "Last * (sum)": "Disk Used"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "T"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-T-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "filterByValue",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-T-/"
+          },
+          "options": {
+            "filters": [
+              {
+                "fieldName": "item",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "snap|tmpfs|devtmpfs|overlay|docker|container"
+                  }
+                }
+              }
+            ],
+            "type": "exclude",
+            "match": "any"
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-T-/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-T-/"
+          },
+          "options": {
+            "renameByName": {
+              "Last * (sum)": "Disk Total"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "joinByField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-U-|^reduce-T-/"
+          },
+          "options": {
+            "byField": "host",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^joinByField/"
+          },
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Disk Used",
+              "operator": "/",
+              "right": "Disk Total"
+            },
+            "alias": "Disk Ratio",
+            "timeSeries": false,
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^joinByField/"
+          },
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Disk Ratio",
+              "operator": "*",
+              "right": "100"
+            },
+            "alias": "硬盘使用率",
+            "timeSeries": false,
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^joinByField/"
+          },
+          "options": {
+            "includeByName": {
+              "host": true,
+              "硬盘使用率": true
+            },
+            "excludeByName": {},
+            "renameByName": {},
+            "indexByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "P"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "formatString",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-P-/"
+          },
+          "options": {
+            "stringField": "host",
+            "outputFormat": "Substring",
+            "substringStart": 4
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-P-/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "max"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "filter": {
+            "id": "byRefId",
+            "options": "/^reduce-P-/"
+          },
+          "options": {
+            "renameByName": {
+              "Last * (max)": "最高温度"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "host\\item": "host"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "host",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "host\\item": true,
+              "Disk Ratio": true,
+              "Disk Used": true,
+              "Disk Total": true
+            },
+            "renameByName": {
+              "host": "服务器",
+              "CPU utilization": "CPU %",
+              "Memory utilization": "内存 %",
+              "Last * (min)": "健康状态",
+              "Last * (sum)": "网络速率"
+            },
+            "indexByName": {
+              "host": 0,
+              "健康状态": 1,
+              "Last * (min)": 1,
+              "CPU utilization": 2,
+              "Memory utilization": 3,
+              "最高温度": 4,
+              "网络速率": 5,
+              "Last * (sum)": 5,
+              "硬盘使用率": 6
+            },
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "服务器",
+                "desc": false
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table",
+      "timeFrom": "5m",
+      "timeShift": null,
+      "description": "按机器后缀合并 sys_ 与 phy_ 数据：sys_ 提供系统资源，phy_ 提供温度与硬件探测。"
+    },
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "celyko2uw5r0gb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "设备"
+              },
+              {
+                "id": "custom.width",
+                "value": 190
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last * (max)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "健康状态"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "red",
+                        "index": 0,
+                        "text": "DOWN"
+                      },
+                      "1": {
+                        "color": "green",
+                        "index": 1,
+                        "text": "OK"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last * (sum)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "网络速率"
+              },
+              {
+                "id": "unit",
+                "value": "bps"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 100000000
+                    },
+                    {
+                      "color": "orange",
+                      "value": 1000000000
+                    },
+                    {
+                      "color": "red",
+                      "value": 5000000000
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uptime (network)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "运行时长"
+              },
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 16,
+        "h": 5
+      },
+      "id": 204,
+      "maxDataPoints": 300,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "exchange"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/Zabbix agent ping|ICMP ping/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "exchange"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/Bits received|Bits sent/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "N",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggers": true,
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "exchange"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/Uptime/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "minSeverity": 3,
+          "mode": 0,
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "U",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "网络设备健康总表",
+      "transformations": [
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "H"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "N"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "reduce",
+          "filter": {
+            "id": "byRefId",
+            "options": "U"
+          },
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ],
+            "mode": "seriesToRows",
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/reduce-H-.*/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "max"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "filter": {
+            "id": "byRefId",
+            "options": "/reduce-N-.*/"
+          },
+          "options": {
+            "filters": [
+              {
+                "fieldName": "item",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "docker|veth|br-|virbr|loopback|Loopback|lo:"
+                  }
+                }
+              }
+            ],
+            "type": "exclude",
+            "match": "any"
+          }
+        },
+        {
+          "id": "groupBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/reduce-N-.*/"
+          },
+          "options": {
+            "fields": {
+              "host": {
+                "operation": "groupby"
+              },
+              "Last *": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "groupingToMatrix",
+          "filter": {
+            "id": "byRefId",
+            "options": "/reduce-U-.*/"
+          },
+          "options": {
+            "rowField": "host",
+            "columnField": "item",
+            "valueField": "Last *",
+            "emptyValue": null
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "host\\item": "host"
+            },
+            "excludeByName": {},
+            "indexByName": {},
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "host",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Uptime (hardware)": true
+            },
+            "renameByName": {
+              "host": "设备",
+              "Last * (max)": "健康状态",
+              "Uptime (network)": "运行时长",
+              "Last * (sum)": "网络速率"
+            },
+            "indexByName": {
+              "host": 0,
+              "Last * (max)": 1,
+              "Uptime (network)": 2,
+              "Last * (sum)": 3
+            },
+            "includeByName": {}
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "设备",
+                "desc": false
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table",
+      "timeFrom": "5m",
+      "timeShift": null,
+      "description": "Zabbix exchange 组网络设备健康状态、运行时长和全端口汇总流量。CPU、内存、温度需交换机 SNMP 模板采集到对应历史项后再显示。"
+    },
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "celyko2uw5r0gb"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 4,
+        "w": 8,
+        "h": 14
+      },
+      "id": 104,
+      "options": {
+        "ackEventColor": "rgb(56, 219, 156)",
+        "ackField": true,
+        "ageField": true,
+        "allowDangerousHTML": false,
+        "customLastChangeFormat": false,
+        "descriptionAtNewLine": false,
+        "descriptionField": true,
+        "fontSize": "100%",
+        "highlightBackground": false,
+        "highlightNewEvents": true,
+        "highlightNewerThan": "1h",
+        "hostField": true,
+        "hostGroups": false,
+        "hostProxy": false,
+        "hostTechNameField": false,
+        "lastChangeFormat": "",
+        "layout": "list",
+        "markAckEvents": false,
+        "okEventColor": "rgb(56, 189, 113)",
+        "opdataField": false,
+        "pageSize": 14,
+        "problemTimeline": true,
+        "severityField": true,
+        "showDatasourceName": false,
+        "showTags": false,
+        "sortProblems": "severity",
+        "statusField": true,
+        "statusIcon": false,
+        "triggerSeverity": [
+          {
+            "color": "rgb(108, 108, 108)",
+            "priority": 0,
+            "severity": "Not classified",
+            "show": true
+          },
+          {
+            "color": "rgb(120, 158, 183)",
+            "priority": 1,
+            "severity": "Information",
+            "show": false
+          },
+          {
+            "color": "rgb(175, 180, 36)",
+            "priority": 2,
+            "severity": "Warning",
+            "show": true
+          },
+          {
+            "color": "rgb(255, 137, 30)",
+            "priority": 3,
+            "severity": "Average",
+            "show": true
+          },
+          {
+            "color": "rgb(255, 101, 72)",
+            "priority": 4,
+            "severity": "High",
+            "show": true
+          },
+          {
+            "color": "rgb(215, 0, 0)",
+            "priority": 5,
+            "severity": "Disaster",
+            "show": true
+          }
+        ]
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "problems",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "celyko2uw5r0gb"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "$zbx_group"
+          },
+          "host": {
+            "filter": "$zbx_host"
+          },
+          "item": {
+            "filter": ""
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "mode": 5,
+          "options": {
+            "acknowledged": 2,
+            "count": false,
+            "disableDataAlignment": true,
+            "hostProxy": false,
+            "hostsInMaintenance": false,
+            "limit": 1001,
+            "minSeverity": 0,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "sortProblems": "severity",
+            "useTimeRange": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "5",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "showProblems": "problems",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "target": "",
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": false,
+            "minSeverity": 0
+          }
+        }
+      ],
+      "title": "Zabbix 当前问题",
+      "type": "alexanderzobnin-zabbix-triggers-panel"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 12,
+        "h": 8
+      },
+      "id": 202,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "headscale_nodes_online{user=~\"$tailnet_user\", name=~\"$tailnet_node\"}",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A",
+          "format": "table"
+        }
+      ],
+      "title": "Tailnet 节点状态",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true
+            },
+            "renameByName": {
+              "Value": "当前值"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "cfpp4b1cx3uv4d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 18,
+        "w": 12,
+        "h": 8
+      },
+      "id": 203,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "cfpp4b1cx3uv4d"
+          },
+          "editorMode": "code",
+          "expr": "time() - headscale_nodes_last_seen_timestamp{user=~\"$tailnet_user\", name=~\"$tailnet_node\"}",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A",
+          "format": "table"
+        }
+      ],
+      "title": "Tailnet 最近活动",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true
+            },
+            "renameByName": {
+              "Value": "当前值"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "tags": [
+    "ctm",
+    "main",
+    "zabbix",
+    "tailnet"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "cfpp4b1cx3uv4d"
+        },
+        "definition": "label_values(headscale_nodes_online, user)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Tailnet 用户",
+        "multi": true,
+        "name": "tailnet_user",
+        "options": [],
+        "query": "label_values(headscale_nodes_online, user)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "cfpp4b1cx3uv4d"
+        },
+        "definition": "label_values(headscale_nodes_online{user=~\"$tailnet_user\"}, name)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Tailnet 节点",
+        "multi": true,
+        "name": "tailnet_node",
+        "options": [],
+        "query": "label_values(headscale_nodes_online{user=~\"$tailnet_user\"}, name)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "/.*/",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "celyko2uw5r0gb"
+        },
+        "definition": "*",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Zabbix 组",
+        "multi": false,
+        "name": "zbx_group",
+        "options": [],
+        "query": "*",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "/.*/",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "celyko2uw5r0gb"
+        },
+        "definition": "*.*",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Zabbix 主机",
+        "multi": false,
+        "name": "zbx_host",
+        "options": [],
+        "query": "*.*",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CTM Main",
+  "uid": "ctm-ops-overview",
+  "version": 5,
+  "weekStart": "",
+  "description": "CTM Main focuses on unresolved Zabbix problems, Tailnet state, and a current server health table. Trend charts live in CTM 服务器趋势."
+}

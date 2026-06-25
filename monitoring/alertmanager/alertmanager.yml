@@ -1,0 +1,68 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: discard
+  group_by:
+    - alertname
+    - area
+    - category
+    - severity
+  group_wait: 30s
+  group_interval: 30m
+  repeat_interval: 12h
+  routes:
+    - receiver: discard
+      matchers:
+        - alertname="HeadscalePreauthKeyExpiresSoon"
+    - receiver: dingtalk-critical
+      matchers:
+        - area="wazuh"
+        - severity="critical"
+      group_wait: 10s
+      group_interval: 5m
+      repeat_interval: 1h
+    - receiver: dingtalk-critical
+      matchers:
+        - area="headscale"
+        - severity="critical"
+      group_wait: 30s
+      group_interval: 10m
+      repeat_interval: 2h
+    - receiver: dingtalk
+      matchers:
+        - area="tailscale"
+        - severity=~"info|warning|critical"
+      group_wait: 30s
+      group_interval: 30m
+      repeat_interval: 12h
+    - receiver: dingtalk
+      matchers:
+        - area="wazuh"
+        - severity=~"warning|critical"
+      group_wait: 10s
+      group_interval: 30m
+      repeat_interval: 12h
+
+receivers:
+  - name: discard
+
+  - name: dingtalk
+    webhook_configs:
+      - url: http://127.0.0.1:8066/alertmanager
+        send_resolved: true
+
+  - name: dingtalk-critical
+    webhook_configs:
+      - url: http://127.0.0.1:8066/alertmanager
+        send_resolved: true
+
+inhibit_rules:
+  - source_matchers:
+      - severity="critical"
+    target_matchers:
+      - severity="warning"
+    equal:
+      - alertname
+      - instance
+      - area

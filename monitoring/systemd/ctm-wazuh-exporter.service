@@ -1,0 +1,20 @@
+[Unit]
+Description=CTM Wazuh Prometheus exporter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/prometheus/wazuh-exporter.env
+ExecStart=/usr/local/bin/ctm-wazuh-exporter
+Restart=always
+RestartSec=5s
+User=nobody
+Group=nogroup
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

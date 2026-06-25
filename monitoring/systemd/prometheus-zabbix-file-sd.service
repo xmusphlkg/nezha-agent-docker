@@ -1,0 +1,12 @@
+[Unit]
+Description=Generate Prometheus file_sd targets from Zabbix
+Wants=network-online.target
+After=network-online.target mysql.service mariadb.service zabbix-server.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/local/sbin/generate-zabbix-blackbox-file-sd.py --env-file /etc/ctm-monitoring/zabbix-file-sd.env --zabbix-output /opt/1panel/apps/prometheus/prometheus/conf/file_sd/zabbix-blackbox-icmp.json --core-output /opt/1panel/apps/prometheus/prometheus/conf/file_sd/core-http.json
+UMask=0027
+Nice=5

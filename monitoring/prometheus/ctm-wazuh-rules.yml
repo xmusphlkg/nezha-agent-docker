@@ -1,0 +1,145 @@
+groups:
+  - name: ctm-wazuh
+    rules:
+      - alert: WazuhAPIUnavailable
+        expr: ctm_wazuh_api_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          area: wazuh
+          category: security-monitoring
+        annotations:
+          summary: "Wazuh API is unavailable"
+          description: "The CTM Wazuh exporter cannot collect data from the Wazuh API."
+
+      - alert: WazuhCriticalProcessDown
+        expr: sum(1 - ctm_wazuh_manager_process_status{critical="true"}) > 0
+        for: 2m
+        labels:
+          severity: critical
+          area: wazuh
+          category: security-monitoring
+        annotations:
+          summary: "Critical Wazuh manager process is down"
+          description: "One or more critical Wazuh manager processes are not running."
+
+      - alert: WazuhIndexerUnavailable
+        expr: ctm_wazuh_indexer_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          area: wazuh
+          category: security-monitoring
+        annotations:
+          summary: "Wazuh indexer alert query is unavailable"
+          description: "The CTM Wazuh exporter cannot query wazuh-alerts-* from the Wazuh indexer."
+
+      - alert: WazuhCriticalAlertsDetected
+        expr: sum(ctm_wazuh_alerts_total{window="15m", severity="critical"}) > 0
+        for: 1m
+        labels:
+          severity: critical
+          area: wazuh
+          category: security
+        annotations:
+          summary: "Critical Wazuh alerts detected"
+          description: "Wazuh reported critical alerts during the last 15 minutes."
+
+      - alert: WazuhHighAlertsDetected
+        expr: sum(ctm_wazuh_alerts_total{window="15m", severity="high"}) > 0
+        for: 2m
+        labels:
+          severity: warning
+          area: wazuh
+          category: security
+        annotations:
+          summary: "High Wazuh alerts detected"
+          description: "Wazuh reported high severity alerts during the last 15 minutes."
+
+      - alert: WazuhSSHRootLogin
+        expr: ctm_wazuh_ssh_agent_top{window="15m", outcome="root_login"} > 0
+        for: 1m
+        labels:
+          severity: critical
+          area: wazuh
+          category: ssh
+        annotations:
+          summary: "SSH root login detected"
+          description: "Wazuh reported at least one successful SSH login as root during the last 15 minutes. Agent={{ $labels.agent_name }}."
+
+      - alert: WazuhSSHInvalidUserAttempts
+        expr: ctm_wazuh_ssh_agent_top{window="15m", outcome="invalid_user"} > 5
+        for: 2m
+        labels:
+          severity: warning
+          area: wazuh
+          category: ssh
+        annotations:
+          summary: "SSH invalid user attempts detected"
+          description: "Wazuh reported more than five non-existent-user SSH attempts during the last 15 minutes. Agent={{ $labels.agent_name }}."
+
+      - alert: WazuhSSHFailureBurst
+        expr: ctm_wazuh_ssh_agent_top{window="15m", outcome="failed"} > 20
+        for: 2m
+        labels:
+          severity: warning
+          area: wazuh
+          category: ssh
+        annotations:
+          summary: "SSH authentication failure burst"
+          description: "Wazuh reported more than 20 SSH authentication failures during the last 15 minutes. Agent={{ $labels.agent_name }}."
+
+      - alert: WazuhSSHActiveRootSession
+        expr: sum by (agent_name, agent_ip, user, srcip) (ctm_wazuh_ssh_active_sessions{user="root"}) > 0
+        for: 1m
+        labels:
+          severity: critical
+          area: wazuh
+          category: ssh
+        annotations:
+          summary: "Active SSH root session detected"
+          description: "Wazuh PAM session events indicate that at least one SSH root session is still active. Agent={{ $labels.agent_name }} src={{ $labels.srcip }}."
+
+      - alert: WazuhKeyFileModified
+        expr: sum by (agent_name, agent_ip, path, user, event, rule_id, level) (ctm_wazuh_fim_recent_event{rank="1", event="modified"}) > 0
+        for: 0m
+        labels:
+          severity: warning
+          area: wazuh
+          category: fim
+        annotations:
+          summary: "Key file modified: {{ $labels.path }}"
+          description: "Key file modified. Agent={{ $labels.agent_name }} ip={{ $labels.agent_ip }} path={{ $labels.path }} user={{ $labels.user }} rule={{ $labels.rule_id }} level={{ $labels.level }}."
+
+      - alert: WazuhKeyFileDeleted
+        expr: sum by (agent_name, agent_ip, path, user, event, rule_id, level) (ctm_wazuh_fim_recent_event{rank="1", event="deleted"}) > 0
+        for: 0m
+        labels:
+          severity: critical
+          area: wazuh
+          category: fim
+        annotations:
+          summary: "Key file deleted: {{ $labels.path }}"
+          description: "Key file deleted. Agent={{ $labels.agent_name }} ip={{ $labels.agent_ip }} path={{ $labels.path }} user={{ $labels.user }} rule={{ $labels.rule_id }} level={{ $labels.level }}."
+
+      - alert: WazuhKeyFileAdded
+        expr: sum by (agent_name, agent_ip, path, user, event, rule_id, level) (ctm_wazuh_fim_recent_event{rank="1", event="added"}) > 0
+        for: 0m
+        labels:
+          severity: warning
+          area: wazuh
+          category: fim
+        annotations:
+          summary: "Key file added: {{ $labels.path }}"
+          description: "Key file added under a watched path. Agent={{ $labels.agent_name }} ip={{ $labels.agent_ip }} path={{ $labels.path }} user={{ $labels.user }} rule={{ $labels.rule_id }} level={{ $labels.level }}."
+
+      - alert: WazuhFIMQueueFull
+        expr: sum(ctm_wazuh_fim_rule_top{window="15m", rule_id="560"}) > 0
+        for: 1m
+        labels:
+          severity: warning
+          area: wazuh
+          category: fim
+        annotations:
+          summary: "Wazuh FIM queue full"
+          description: "Wazuh reported that the file integrity monitoring real-time queue is full."

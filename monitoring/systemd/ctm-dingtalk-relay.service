@@ -1,0 +1,19 @@
+[Unit]
+Description=CTM Alertmanager to DingTalk relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/ctm-monitoring/dingtalk-relay.env
+ExecStart=/usr/local/sbin/ctm-dingtalk-relay.py
+DynamicUser=true
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

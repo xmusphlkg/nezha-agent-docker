@@ -1,0 +1,13 @@
+.env
+*.env
+
+api/.venv/
+api/.pytest_cache/
+__pycache__/
+*.pyc
+
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
+web/vite.config.js
+web/vite.config.d.ts

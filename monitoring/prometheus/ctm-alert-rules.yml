@@ -1,0 +1,97 @@
+groups:
+  - name: ctm-infra-core
+    interval: 30s
+    rules:
+      - alert: HeadscaleExporterDown
+        expr: up{job=~"headscale|headscale_exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          area: headscale
+          category: monitoring
+        annotations:
+          summary: "Headscale metrics target is down"
+          description: "{{ $labels.job }} {{ $labels.instance }} has not scraped successfully for 2 minutes."
+
+      - alert: HeadscaleDatabaseUnhealthy
+        expr: headscale_health_database_connectivity == 0
+        for: 2m
+        labels:
+          severity: critical
+          area: headscale
+          category: monitoring
+        annotations:
+          summary: "Headscale database connectivity is unhealthy"
+          description: "Headscale exporter reports database connectivity failure."
+
+      - alert: TailnetNodeOffline
+        expr: headscale_nodes_online == 0
+        for: 5m
+        labels:
+          severity: warning
+          area: tailnet
+        annotations:
+          summary: "Tailnet node is offline"
+          description: "{{ $labels.name }} owned by {{ $labels.user }} has been offline for 5 minutes."
+
+      - alert: PrometheusTargetDown
+        expr: up == 0
+        for: 3m
+        labels:
+          severity: warning
+          area: prometheus
+        annotations:
+          summary: "Prometheus target is down"
+          description: "{{ $labels.job }} {{ $labels.instance }} has failed scraping for 3 minutes."
+
+      - alert: BlackboxProbeFailed
+        expr: probe_success == 0
+        for: 3m
+        labels:
+          severity: warning
+          area: blackbox
+        annotations:
+          summary: "Blackbox probe failed"
+          description: "{{ $labels.instance }} probe failed for 3 minutes."
+
+      - alert: HostHighCpu
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 10m
+        labels:
+          severity: warning
+          area: host
+        annotations:
+          summary: "Host CPU is high"
+          description: "{{ $labels.instance }} CPU usage is above 85% for 10 minutes."
+
+      - alert: HostHighMemory
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 10m
+        labels:
+          severity: warning
+          area: host
+        annotations:
+          summary: "Host memory is high"
+          description: "{{ $labels.instance }} memory usage is above 90% for 10 minutes."
+
+      - alert: HostDiskNearlyFull
+        expr: 100 * (1 - node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs|ramfs",mountpoint!~"/run.*|/var/lib/docker/.*"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay|squashfs|ramfs",mountpoint!~"/run.*|/var/lib/docker/.*"}) > 85
+        for: 15m
+        labels:
+          severity: warning
+          area: host
+        annotations:
+          summary: "Host disk is nearly full"
+          description: "{{ $labels.instance }} {{ $labels.mountpoint }} is above 85% usage."
+
+      - alert: HeadscaleRoutesAwaitingApproval
+        expr: (sum(headscale_nodes_available_routes) - sum(headscale_nodes_approved_routes)) > 0
+        for: 10m
+        labels:
+          severity: info
+          area: tailscale
+          category: routing
+        annotations:
+          summary: "Headscale routes are awaiting approval"
+          description: "One or more Tailnet route advertisements are available but not approved."
+          value: "{{ $value }}"

@@ -1,0 +1,8 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+httpx==0.28.1
+aiomysql==0.2.0
+cryptography==43.0.3
+pydantic-settings==2.7.1
+python-multipart==0.0.20
+orjson==3.10.13

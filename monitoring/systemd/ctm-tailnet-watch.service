@@ -1,0 +1,16 @@
+[Unit]
+Description=CTM Tailnet change notification watcher
+Wants=network-online.target
+After=network-online.target ctm-dingtalk-relay.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/ctm-monitoring/tailnet-watch.env
+ExecStart=/usr/local/sbin/ctm-tailnet-watch.py
+User=root
+Group=root
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/ctm-monitoring

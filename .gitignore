@@ -1,0 +1,12 @@
+.env
+*.env
+ctm-console/.env
+ctm-console/api/.venv/
+ctm-console/api/.pytest_cache/
+ctm-console/web/node_modules/
+ctm-console/web/dist/
+ctm-console/web/*.tsbuildinfo
+ctm-console/web/vite.config.js
+ctm-console/web/vite.config.d.ts
+__pycache__/
+*.pyc

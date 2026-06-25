@@ -1,0 +1,13 @@
+# Merge these top-level sections into prometheus.yml.
+# If Alertmanager runs in Docker instead of host networking, replace the target
+# with an address reachable from the Prometheus container.
+
+rule_files:
+  - /etc/prometheus/rules/ctm-alert-rules.yml
+  - /etc/prometheus/rules/ctm-wazuh-rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 127.0.0.1:9093
