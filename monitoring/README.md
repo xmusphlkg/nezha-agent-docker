@@ -39,7 +39,11 @@ The monitoring stack is reachable on `192.168.3.222`:
 | --- | --- | --- |
 | Grafana | `192.168.30.91:30037` | existing runtime used by CTM Console deep links |
 | Prometheus | `:9090` | ready |
-| Zabbix | `:8080` | API version 7.2.12 |
+| Zabbix | `:8080` | API version 7.4.11 |
+
+Zabbix API recheck on 2026-06-27: `host.get` should request
+`selectHostGroups` and `monitored_hosts`; the current token sees 18 monitored
+hosts across `Hardware`, `System`, `UPS`, and `exchange`.
 
 Prometheus initially had 3 active scrape targets:
 
@@ -88,7 +92,7 @@ The dashboard set is split into one operational home page and detail dashboards:
 | CTM 告警安全 | `ctm-alerts-security` | Incident and security scenario: Zabbix events, Grafana alerts, stale nodes, Tailnet key inventory, route approvals |
 | CTM 全量排障 | `ctm-unified-infra` | Cross-domain drilldown ordered by response workflow, not the old panel dump |
 
-All Grafana panels that display Zabbix data use `alexanderzobnin-zabbix-datasource`. The dashboard intentionally no longer uses MySQL or raw SQL for Zabbix panels. Prometheus is still used for Headscale, Blackbox, and alerting signals.
+All Grafana panels that display Zabbix data use `alexanderzobnin-zabbix-datasource`. The dashboard intentionally no longer uses MySQL or raw SQL for Zabbix panels. Prometheus is still used for Headscale, Blackbox, and alerting signals. Server panels are aligned to the current Zabbix naming shape: enabled servers primarily appear as `ServerXX` display names in `Hardware`, while `System`, `cloud_*`, and legacy `sys_`/`phy_` hosts remain compatible.
 
 Dashboard variables:
 

@@ -335,7 +335,7 @@ function ServerRow({ machine, grafana }: { machine: Machine; grafana?: GrafanaIn
   const state = reportingState(machine);
   const uptime = uptimeDisplay(machine);
   const trendsUrl = grafanaDashboardUrl(grafana, 'server-trends', {
-    'var-machine': machine.id,
+    'var-machine': zabbixHostVariable(machine),
     from: 'now-6h',
     to: 'now',
   });
@@ -377,7 +377,7 @@ function ServerRow({ machine, grafana }: { machine: Machine; grafana?: GrafanaIn
 
       <span className="server-divider" aria-hidden="true" />
 
-      <InfoCell label="系统" value={machine.osName ?? '-'} />
+      <InfoCell label="系统" value={machine.osName ?? '-'} className="os-cell" />
       <InfoCell label={uptime.label} value={uptime.value} />
       <ResourceMetric icon={Cpu} label="CPU" value={machine.cpuPct} />
       <UsageMetric icon={MemoryStick} label="MEM" value={machine.memPct} detail={capacityText(machine.memBytes, machine.maxMemBytes)} warn={80} bad={92} />
@@ -935,9 +935,19 @@ function SourceStrip({ sources, stale }: { sources: SourceStatus[]; stale: boole
   );
 }
 
-function InfoCell({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
+function InfoCell({
+  label,
+  value,
+  strong = false,
+  className = ''
+}: {
+  label: string;
+  value: string;
+  strong?: boolean;
+  className?: string;
+}) {
   return (
-    <span className={`info-cell ${strong ? 'strong' : ''}`}>
+    <span className={`info-cell ${strong ? 'strong' : ''} ${className}`.trim()}>
       <small>{label}</small>
       <b>{value}</b>
     </span>
@@ -1204,6 +1214,10 @@ function severityTone(value: string) {
   if (['medium', 'failed', 'invalid_user', 'modified', 'added', 'warning'].includes(normalized)) return 'warn';
   if (['low', 'info', 'success', 'ok'].includes(normalized)) return 'ok';
   return 'neutral';
+}
+
+function zabbixHostVariable(machine: Machine) {
+  return machine.sysHost ?? machine.phyHost ?? machine.id;
 }
 
 function readHostSettings(params: URLSearchParams): HostSettings {

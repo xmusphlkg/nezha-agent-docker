@@ -67,7 +67,7 @@ def channel_and_id(host: dict[str, Any]) -> tuple[str | None, str]:
 
 
 def host_search_text(host: dict[str, Any]) -> tuple[list[str], str]:
-    groups = host.get("groups") or []
+    groups = host.get("groups") or host.get("hostgroups") or []
     group_names = [str(group.get("name", "")).lower() for group in groups]
     text = " ".join(
         [
@@ -196,9 +196,20 @@ def os_value(item: dict[str, Any]) -> str | None:
     if (
         "system.sw.os" in key
         or "system.uname" in key
+        or "system.descr" in key
+        or "sysdescr" in key
+        or "pve.version" in key
+        or "pveversion" in key
+        or "proxmox.version" in key
         or "operating system" in text
+        or "system description" in text
+        or "pve version" in text
+        or "pve manager" in text
+        or "proxmox version" in text
         or "systemosname" in key
         or "系统版本" in text
+        or "pve-manager" in raw.lower()
+        or "proxmox-ve" in raw.lower()
     ):
         return compact_os_name(raw)
     return None
@@ -218,31 +229,92 @@ def compact_os_name(value: str) -> str | None:
     lower = raw.lower()
     if "windows server" in lower:
         match = re.search(r"Windows Server\s+(\d{4})", raw, re.IGNORECASE)
-        return f"Win {match.group(1)}" if match else "Win Server"
+        return f"Windows Server {match.group(1)}" if match else "Windows Server"
     if "windows" in lower:
-        match = re.search(r"Windows\s+(?:10|11|Server)?", raw, re.IGNORECASE)
+        match = re.search(r"Windows\s+(?:10|11)(?:\s+[A-Za-z0-9().-]+)?", raw, re.IGNORECASE)
         return (match.group(0).strip() if match else "Windows") or "Windows"
     if "openwrt" in lower:
-        return "OpenWrt"
+        return with_optional_version("OpenWrt", raw, r"OpenWrt\s+([0-9][A-Za-z0-9.+_-]*)")
     if "istoreos" in lower:
-        return "iStoreOS"
+        return with_optional_version("iStoreOS", raw, r"iStoreOS\s+([0-9][A-Za-z0-9.+_-]*)")
+    if "ikuai" in lower:
+        return with_optional_version("iKuai", raw, r"iKuai\s+([0-9][A-Za-z0-9.+_-]*)")
+    if "truenas" in lower:
+        match = re.search(r"TrueNAS[-\s]+([0-9]+(?:\.[0-9]+){0,3})", raw, re.IGNORECASE)
+        label = f"TrueNAS {match.group(1)}" if match else "TrueNAS"
+        kernel = linux_kernel_label(raw)
+        return f"{label} / {kernel}" if kernel else label
+    if "routeros" in lower or "mikrotik" in lower:
+        return with_optional_version("RouterOS", raw, r"RouterOS\s+([0-9][A-Za-z0-9.+_-]*)")
+    if "cisco ios" in lower:
+        version = first_match(raw, r"Version\s+([0-9][A-Za-z0-9()._-]*)")
+        return f"Cisco IOS {version}" if version else "Cisco IOS"
+    if "freebsd" in lower:
+        return with_optional_version("FreeBSD", raw, r"FreeBSD\s+([0-9][A-Za-z0-9.+_-]*)")
+    if "esxi" in lower or "vmware" in lower:
+        version = first_match(raw, r"(?:VMware\s+)?ESXi\s+([0-9][A-Za-z0-9.+_-]*)")
+        return f"VMware ESXi {version}" if version else "VMware ESXi"
     if "proxmox" in lower or "-pve" in lower or " pmx " in lower:
-        return "Proxmox VE"
+        pve_version = first_match(raw, r"(?:pve-manager[/:\s]+|proxmox-ve[/:\s]+|Proxmox VE\s+)([0-9][A-Za-z0-9.+_-]*)")
+        label = f"Proxmox VE {pve_version}" if pve_version else "Proxmox VE"
+        kernel = linux_kernel_label(raw) or pve_kernel_label(raw)
+        return f"{label} / {kernel}" if kernel else label
     if "ubuntu" in lower:
-        return "Ubuntu"
+        version = ubuntu_release_version(raw)
+        kernel = linux_kernel_label(raw)
+        label = f"Ubuntu {version}" if version else "Ubuntu"
+        return f"{label} / {kernel}" if kernel else label
     if "debian" in lower:
-        return "Debian"
+        version = first_match(raw, r"Debian GNU/Linux\s+([0-9][A-Za-z0-9.+_-]*)")
+        kernel = linux_kernel_label(raw)
+        label = f"Debian {version}" if version else "Debian"
+        return f"{label} / {kernel}" if kernel and not version else label
     if "rocky" in lower:
-        return "Rocky Linux"
+        return with_optional_version("Rocky Linux", raw, r"Rocky(?:\s+Linux)?\s+([0-9][A-Za-z0-9.+_-]*)")
     if "alma" in lower:
-        return "AlmaLinux"
+        return with_optional_version("AlmaLinux", raw, r"AlmaLinux\s+([0-9][A-Za-z0-9.+_-]*)")
     if "centos" in lower:
-        return "CentOS"
+        return with_optional_version("CentOS", raw, r"CentOS(?:\s+Linux)?\s+([0-9][A-Za-z0-9.+_-]*)")
     if "red hat" in lower or "rhel" in lower:
-        return "RHEL"
+        version = first_match(raw, r"(?:Red Hat Enterprise Linux|RHEL)\s+([0-9][A-Za-z0-9.+_-]*)")
+        return f"RHEL {version}" if version else "RHEL"
     if "linux" in lower:
-        return "Linux"
-    return raw[:36]
+        return linux_kernel_label(raw) or "Linux"
+    return raw[:80]
+
+
+def first_match(value: str, pattern: str) -> str | None:
+    match = re.search(pattern, value, re.IGNORECASE)
+    return match.group(1).rstrip(".,;") if match else None
+
+
+def with_optional_version(label: str, value: str, pattern: str) -> str:
+    version = first_match(value, pattern)
+    return f"{label} {version}" if version else label
+
+
+def linux_kernel_label(value: str) -> str | None:
+    version = first_match(value, r"Linux(?:\s+version)?\s+([0-9][A-Za-z0-9.+_-]*)")
+    if not version:
+        version = first_match(value, r"Linux\s+\S+\s+([0-9][A-Za-z0-9.+_-]*)")
+    return f"Linux {version}" if version else None
+
+
+def pve_kernel_label(value: str) -> str | None:
+    version = first_match(value, r"(?:running\s+kernel:|kernel:?)\s+([0-9][A-Za-z0-9.+_-]*-pve)")
+    return f"Linux {version}" if version else None
+
+
+def ubuntu_release_version(value: str) -> str | None:
+    for pattern in (
+        r"ubuntu[0-9]*~([0-9]{2}\.[0-9]{2}(?:\.[0-9]+)?)",
+        r"~([0-9]{2}\.[0-9]{2}(?:\.[0-9]+)?)[^\\s]*-Ubuntu",
+        r"Ubuntu\s+([0-9]{2}\.[0-9]{2}(?:\.[0-9]+)?)",
+    ):
+        version = first_match(value, pattern)
+        if version:
+            return version
+    return None
 
 
 def best_label(values: list[str]) -> str | None:
@@ -250,6 +322,56 @@ def best_label(values: list[str]) -> str | None:
     if not clean:
         return None
     return sorted(set(clean), key=lambda value: (value in {"Linux", "Windows"}, len(value)))[0]
+
+
+def best_os_label(values: list[str]) -> str | None:
+    clean = [value for value in values if value]
+    if not clean:
+        return None
+
+    def score(value: str) -> tuple[int, int]:
+        text = value.lower()
+        known = any(
+            token in text
+            for token in [
+                "ubuntu",
+                "debian",
+                "proxmox",
+                "truenas",
+                "ikuai",
+                "openwrt",
+                "istoreos",
+                "routeros",
+                "cisco ios",
+                "freebsd",
+                "esxi",
+                "windows",
+                "rocky",
+                "alma",
+                "centos",
+                "rhel",
+            ]
+        )
+        has_release_version = bool(
+            re.search(
+                r"\b(?:ubuntu|debian|proxmox ve|truenas|ikuai|openwrt|istoreos|routeros|freebsd|vmware esxi|rocky linux|almalinux|centos|rhel)\s+\d",
+                value,
+                re.IGNORECASE,
+            )
+        ) or bool(re.search(r"\bwindows(?: server)?\s+\d", value, re.IGNORECASE))
+        has_version = bool(re.search(r"\d+\.\d+", value))
+        has_kernel = " / linux " in text
+        generic = text in {"linux", "windows"} or re.fullmatch(r"linux\s+\d+(?:\.\d+)+", text)
+        return (
+            (20 if known else 0)
+            + (12 if has_release_version else 0)
+            + (5 if has_version else 0)
+            + (3 if has_kernel else 0)
+            - (10 if generic else 0),
+            -len(value),
+        )
+
+    return max(set(clean), key=score)
 
 
 def is_memory_item(item: dict[str, Any]) -> bool:
@@ -367,7 +489,15 @@ def is_network_item(item: dict[str, Any]) -> bool:
 
 def is_agent_ping_item(item: dict[str, Any]) -> bool:
     text = item_text(item)
-    return "agent.ping" in text or "zabbix agent availability" in text
+    key = str(item.get("key_") or "").lower()
+    return (
+        "agent.ping" in text
+        or "icmpping" == key
+        or "zabbix agent availability" in text
+        or "snmp agent availability" in text
+        or "zabbix[host,agent,available]" in key
+        or "zabbix[host,snmp,available]" in key
+    )
 
 
 def is_temperature_item(item: dict[str, Any]) -> bool:
@@ -699,10 +829,13 @@ def normalize_machines(
     *,
     stale: bool = False,
 ) -> tuple[list[Machine], list[NetworkDevice]]:
+    hosts = [host for host in hosts if str(host.get("status", "0")) == "0"]
     host_by_id = {str(host["hostid"]): host for host in hosts}
     items_by_host: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for item in items:
-        items_by_host[str(item.get("hostid"))].append(item)
+        hostid = str(item.get("hostid"))
+        if hostid in host_by_id:
+            items_by_host[hostid].append(item)
 
     problem_index = build_problem_index(problems)
     grouped: dict[str, dict[str, Any]] = defaultdict(lambda: {"sys": None, "phy": None, "other": []})
@@ -799,11 +932,15 @@ def normalize_machines(
         machines.append(
             Machine(
                 id=machine_id,
-                sysHost=sys_payload["name"] if sys_payload else None,
+                sysHost=(
+                    sys_payload["name"]
+                    if sys_payload
+                    else names[0] if mode == "standalone" and names else None
+                ),
                 phyHost=phy_payload["name"] if phy_payload else None,
                 mode=mode,
                 health=health_from_metrics(metrics, machine_problems, stale=stale),
-                osName=best_label(metrics.os_names),
+                osName=best_os_label(metrics.os_names),
                 cpuModel=best_label(metrics.cpu_models),
                 cpuCores=max(metrics.cpu_cores) if metrics.cpu_cores else None,
                 cpuPct=avg(metrics.cpu),

@@ -558,9 +558,9 @@ p {
 .server-row {
   display: grid;
   grid-template-columns:
-    minmax(240px, 1.45fr)
+    minmax(230px, 1.35fr)
     1px
-    minmax(100px, 0.62fr)
+    minmax(148px, 0.95fr)
     minmax(92px, 0.62fr)
     repeat(3, minmax(86px, 0.55fr))
     minmax(98px, 0.65fr)
@@ -721,6 +721,15 @@ p {
 
 .info-cell.strong b {
   color: var(--red);
+}
+
+.info-cell.os-cell b {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 1px;
+  text-overflow: clip;
+  white-space: nowrap;
+  scrollbar-width: thin;
 }
 
 .resource-cell small {

@@ -29,7 +29,7 @@ def test_sys_phy_hosts_merge_into_one_machine():
     assert machines[0].mode == "paired"
     assert machines[0].sysHost == "sys_s3"
     assert machines[0].phyHost == "phy_s3"
-    assert machines[0].osName == "Proxmox VE"
+    assert machines[0].osName == "Proxmox VE / Linux 6.8.12-4-pve"
     assert machines[0].cpuModel == "Intel Xeon(R) Gold 6138 @ 2.00GHz"
     assert machines[0].cpuCores == 16
     assert machines[0].cpuPct == 42
@@ -51,7 +51,48 @@ def test_unpaired_host_stays_standalone():
 
     assert machines[0].id == "nas"
     assert machines[0].mode == "standalone"
+    assert machines[0].sysHost == "NAS"
     assert machines[0].agentUp is True
+
+
+def test_zabbix_74_hostgroups_and_snmp_availability_are_supported():
+    hosts = [
+        {"hostid": "1", "host": "s1", "name": "Server01", "hostgroups": [{"name": "Hardware"}]},
+        {"hostid": "2", "host": "e1", "name": "核心交换机", "hostgroups": [{"name": "exchange"}]},
+    ]
+    items = [
+        {
+            "hostid": "1",
+            "name": "SNMP agent availability",
+            "key_": "zabbix[host,snmp,available]",
+            "lastvalue": "1",
+        },
+        {"hostid": "2", "name": "ICMP ping", "key_": "icmpping", "lastvalue": "1"},
+    ]
+
+    machines, devices = normalize_machines(hosts, items, [])
+
+    assert machines[0].id == "s1"
+    assert machines[0].sysHost == "Server01"
+    assert machines[0].agentUp is True
+    assert len(devices) == 1
+    assert devices[0].host == "核心交换机"
+
+
+def test_disabled_hosts_are_ignored():
+    hosts = [
+        {"hostid": "1", "host": "old", "name": "old", "status": "1", "groups": []},
+        {"hostid": "2", "host": "new", "name": "new", "status": "0", "groups": []},
+    ]
+    items = [
+        {"hostid": "1", "name": "CPU utilization", "key_": "system.cpu.util", "lastvalue": "99"},
+        {"hostid": "2", "name": "CPU utilization", "key_": "system.cpu.util", "lastvalue": "10"},
+    ]
+
+    machines, _ = normalize_machines(hosts, items, [])
+
+    assert [machine.id for machine in machines] == ["new"]
+    assert machines[0].cpuPct == 10
 
 
 def test_space_prefix_and_chinese_ids_are_preserved():
@@ -170,6 +211,78 @@ def test_direct_memory_percentage_wins_over_byte_derivation():
     )
 
     assert metrics.mem == [33]
+
+
+def test_os_is_derived_from_snmp_system_description():
+    ikuai = summarize_items(
+        [
+            {
+                "name": "System description",
+                "key_": "system.descr[sysDescr.0]",
+                "lastvalue": "Linux iKuai 5.10.194 #0 SMP Mon Dec 13 10:43:05 2021 x86_64",
+            }
+        ]
+    )
+    truenas = summarize_items(
+        [
+            {
+                "name": "System description",
+                "key_": "system.descr[sysDescr.0]",
+                "lastvalue": (
+                    "TrueNAS-25.10.4. Hardware: x86_64 Intel(R) Xeon(R) Gold 6138 "
+                    "CPU @ 2.00GHz. Software: Linux 6.12.91-production+truenas"
+                ),
+            }
+        ]
+    )
+
+    assert ikuai.os_names == ["iKuai 5.10.194"]
+    assert truenas.os_names == ["TrueNAS 25.10.4 / Linux 6.12.91-production+truenas"]
+
+
+def test_ubuntu_and_pve_versions_are_derived_from_kernel_strings():
+    ubuntu = summarize_items(
+        [
+            {
+                "name": "Operating system",
+                "key_": "system.sw.os",
+                "lastvalue": (
+                    "Linux version 6.8.0-124-generic (buildd@host) "
+                    "(gcc (Ubuntu 12.3.0-1ubuntu1~22.04.3) 12.3.0) "
+                    "#124~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC"
+                ),
+            }
+        ]
+    )
+    pve = summarize_items(
+        [
+            {
+                "name": "Operating system",
+                "key_": "system.sw.os",
+                "lastvalue": (
+                    "Linux version 6.8.12-4-pve (build@proxmox) "
+                    "#1 SMP PREEMPT_DYNAMIC PMX 6.8.12-4"
+                ),
+            }
+        ]
+    )
+
+    assert ubuntu.os_names == ["Ubuntu 22.04.3 / Linux 6.8.0-124-generic"]
+    assert pve.os_names == ["Proxmox VE / Linux 6.8.12-4-pve"]
+
+
+def test_pve_product_version_is_read_from_custom_version_item():
+    metrics = summarize_items(
+        [
+            {
+                "name": "PVE version",
+                "key_": "pve.version",
+                "lastvalue": "pve-manager/8.3.5/9f411e79 (running kernel: 6.8.12-4-pve)",
+            }
+        ]
+    )
+
+    assert metrics.os_names == ["Proxmox VE 8.3.5 / Linux 6.8.12-4-pve"]
 
 
 def test_disk_usage_is_derived_from_used_and_total_bytes():

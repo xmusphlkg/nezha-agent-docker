@@ -164,10 +164,10 @@
           "evaltype": "0",
           "functions": [],
           "group": {
-            "filter": "System"
+            "filter": "/^(System|Hardware)$/"
           },
           "host": {
-            "filter": "/^sys_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
             "filter": "CPU utilization"
@@ -219,10 +219,10 @@
           "evaltype": "0",
           "functions": [],
           "group": {
-            "filter": "System"
+            "filter": "/^(System|Hardware)$/"
           },
           "host": {
-            "filter": "/^sys_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
             "filter": "Memory utilization"
@@ -371,10 +371,10 @@
           "evaltype": "0",
           "functions": [],
           "group": {
-            "filter": "System"
+            "filter": "/^(System|Hardware)$/"
           },
           "host": {
-            "filter": "/^sys_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
             "filter": "/Bits received|Bits sent/"
@@ -523,10 +523,10 @@
           "evaltype": "0",
           "functions": [],
           "group": {
-            "filter": "System"
+            "filter": "/^(System|Hardware)$/"
           },
           "host": {
-            "filter": "/^sys_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
             "filter": "/FS .*Space: Used, in %/"
@@ -670,10 +670,10 @@
             "filter": "/.*/"
           },
           "host": {
-            "filter": "/^(sys|phy)_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
-            "filter": "/Zabbix agent ping|ICMP ping/"
+            "filter": "/Zabbix agent ping|Zabbix agent availability|SNMP agent availability|ICMP ping|zabbix\\[host,(agent|snmp),available\\]|icmpping/"
           },
           "itemTag": {
             "filter": ""
@@ -822,10 +822,10 @@
             "filter": "/.*/"
           },
           "host": {
-            "filter": "/^phy_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
-            "filter": "/Temp Value|Temperature/"
+            "filter": "/Temp Value|[Tt]emperature(?:, C)?|sensor\\.temp\\.value|cpu\\.temp|ipmi\\.value.*[Tt]emperature/"
           },
           "itemTag": {
             "filter": ""
@@ -974,10 +974,10 @@
             "filter": "/.*/"
           },
           "host": {
-            "filter": "/^phy_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
-            "filter": "/Fan.*Speed/"
+            "filter": "/Fan.*[Ss]peed|FAN.*speed|sensor\\.fan\\.speed/"
           },
           "itemTag": {
             "filter": ""
@@ -1117,10 +1117,10 @@
             "filter": "/.*/"
           },
           "host": {
-            "filter": "/^phy_$machine$/"
+            "filter": "/(^$machine$|^sys_$machine$|^phy_$machine$)/"
           },
           "item": {
-            "filter": "/Current state|Uptime|Fan.*Speed|Temp Value|Temperature|watts|Power/"
+            "filter": "/Current state|Uptime|Fan.*[Ss]peed|FAN.*speed|sensor\\.fan\\.speed|Temp Value|[Tt]emperature(?:, C)?|sensor\\.temp\\.value|cpu\\.temp|ipmi\\.value.*[Tt]emperature|watts|Power/"
           },
           "itemTag": {
             "filter": ""
@@ -1213,26 +1213,26 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "s3",
-          "value": "s3"
+          "text": "Server10",
+          "value": "Server10"
         },
         "datasource": {
           "type": "alexanderzobnin-zabbix-datasource",
           "uid": "celyko2uw5r0gb"
         },
-        "definition": "*.*",
+        "definition": "Server01,Server03,Server04,Server05,Server06,Server07,Server08,Server09,Server10,南昌云服务器,广州云服务器,福州云服务器",
         "hide": 0,
         "includeAll": false,
         "label": "机器",
         "multi": false,
         "name": "machine",
         "options": [],
-        "query": "*.*",
+        "query": "Server01,Server03,Server04,Server05,Server06,Server07,Server08,Server09,Server10,南昌云服务器,广州云服务器,福州云服务器",
         "refresh": 1,
-        "regex": "/^(?:sys|phy)_(.*)$/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query"
+        "type": "custom"
       }
     ]
   },

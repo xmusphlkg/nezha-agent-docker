@@ -88,16 +88,18 @@ class ZabbixClient:
         return await self.call("apiinfo.version", auth=False)
 
     async def hosts(self) -> list[dict[str, Any]]:
-        return await self.call(
+        hosts = await self.call(
             "host.get",
             {
                 "output": ["hostid", "host", "name", "status"],
-                "selectGroups": ["groupid", "name"],
+                "monitored_hosts": True,
+                "selectHostGroups": ["groupid", "name"],
                 "selectInterfaces": ["interfaceid", "ip", "dns", "type", "main", "available", "error"],
                 "selectInventory": ["type", "os", "location", "model", "serialno_a"],
                 "sortfield": ["name"],
             },
         )
+        return [normalize_host_groups(host) for host in hosts]
 
     async def items_for_hosts(self, hostids: list[str]) -> list[dict[str, Any]]:
         if not hostids:
@@ -192,3 +194,9 @@ class ZabbixClient:
                 "limit": limit,
             },
         )
+
+
+def normalize_host_groups(host: dict[str, Any]) -> dict[str, Any]:
+    groups = host.get("groups") or host.get("hostgroups") or []
+    host["groups"] = groups
+    return host

@@ -75,7 +75,15 @@ class Settings(BaseSettings):
     alerts_interval_sec: int = 60
     series_cache_ttl_sec: int = 300
 
-    @field_validator("zabbix_url", "prometheus_url", "grafana_base_url")
+    @field_validator("zabbix_url")
+    @classmethod
+    def normalize_zabbix_url(cls, value: str) -> str:
+        stripped = value.rstrip("/")
+        if not stripped or stripped.endswith("/api_jsonrpc.php"):
+            return stripped
+        return f"{stripped}/api_jsonrpc.php"
+
+    @field_validator("prometheus_url", "grafana_base_url")
     @classmethod
     def strip_trailing_slash(cls, value: str) -> str:
         return value.rstrip("/")

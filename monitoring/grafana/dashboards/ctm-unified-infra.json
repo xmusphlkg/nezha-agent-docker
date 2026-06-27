@@ -978,7 +978,7 @@
             "filter": "/.*/"
           },
           "item": {
-            "filter": "/CPU[12] Temp Value/"
+            "filter": "/CPU[12] Temp Value|CPU[12] Temperature, C|CPU package temperature|CPU core [0-9]+ temperature|sensor\\.temp\\.value|cpu\\.temp[12]/"
           },
           "itemTag": {
             "filter": ""
@@ -1346,7 +1346,7 @@
             "filter": "/.*/"
           },
           "item": {
-            "filter": "CPU1 Temp Value"
+            "filter": "/CPU1 Temp Value|CPU1 Temperature, C|CPU package temperature|sensor\\.temp\\.value\\[coretemp\\.package_0\\]|cpu\\.temp1/"
           },
           "itemTag": {
             "filter": ""
@@ -1401,7 +1401,7 @@
             "filter": "/.*/"
           },
           "item": {
-            "filter": "CPU2 Temp Value"
+            "filter": "/CPU2 Temp Value|CPU2 Temperature, C|CPU core [0-9]+ temperature|sensor\\.temp\\.value\\[coretemp\\.core_[0-9]+\\]|cpu\\.temp2/"
           },
           "itemTag": {
             "filter": ""
@@ -1514,7 +1514,7 @@
             "filter": "$zbx_host"
           },
           "item": {
-            "filter": "/Temperature|Fan|Power|Voltage|UPS|Status|Serial|sensor|ipmi|IPMI|Temp/"
+            "filter": "/[Tt]emperature|Fan|Power|Voltage|UPS|Status|Serial|sensor|ipmi|IPMI|Temp/"
           },
           "itemTag": {
             "filter": ""
@@ -3975,19 +3975,19 @@
           "type": "alexanderzobnin-zabbix-datasource",
           "uid": "celyko2uw5r0gb"
         },
-        "definition": "*.*",
+        "definition": "417交换机,PDU_UPS_1,PDU_UPS_3,PDU_市电,Server01,Server03,Server04,Server05,Server06,Server07,Server08,Server09,Server10,UPS,南昌云服务器,广州云服务器,核心交换机,福州云服务器",
         "hide": 0,
         "includeAll": true,
         "label": "Zabbix 主机",
         "multi": false,
         "name": "zbx_host",
         "options": [],
-        "query": "*.*",
+        "query": "417交换机,PDU_UPS_1,PDU_UPS_3,PDU_市电,Server01,Server03,Server04,Server05,Server06,Server07,Server08,Server09,Server10,UPS,南昌云服务器,广州云服务器,核心交换机,福州云服务器",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query"
+        "type": "custom"
       },
       {
         "allValue": ".*",
