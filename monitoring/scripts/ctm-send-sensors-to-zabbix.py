@@ -35,6 +35,7 @@ def collect_sensors(sensors_bin: str) -> list[dict[str, str]]:
     raw = subprocess.check_output([sensors_bin, "-j"], text=True, stderr=subprocess.STDOUT)
     payload = json.loads(raw)
     metrics: list[dict[str, str]] = []
+    values_by_key: dict[str, str] = {}
     for chip, chip_data in payload.items():
         if not isinstance(chip_data, dict):
             continue
@@ -49,13 +50,24 @@ def collect_sensors(sensors_bin: str) -> list[dict[str, str]]:
             ]
             if not input_values:
                 continue
+            key = f"sensor.temp.value[{chip_id}.{label_slug(label)}]"
+            value = f"{float(input_values[0]):.3f}"
             metrics.append(
                 {
-                    "key": f"sensor.temp.value[{chip_id}.{label_slug(label)}]",
-                    "value": f"{float(input_values[0]):.3f}",
+                    "key": key,
+                    "value": value,
                 }
             )
+            values_by_key[key] = value
+    add_compatibility_aliases(metrics, values_by_key)
     return metrics
+
+
+def add_compatibility_aliases(metrics: list[dict[str, str]], values_by_key: dict[str, str]) -> None:
+    for index in range(2):
+        value = values_by_key.get(f"sensor.temp.value[coretemp.package_{index}]")
+        if value is not None:
+            metrics.append({"key": f"cpu.temp{index + 1}", "value": value})
 
 
 def send_to_zabbix(server: str, port: int, host: str, metrics: list[dict[str, str]]) -> dict[str, Any]:
