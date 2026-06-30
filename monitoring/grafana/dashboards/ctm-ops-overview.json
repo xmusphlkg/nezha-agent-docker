@@ -1536,18 +1536,6 @@
           }
         },
         {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-A-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
-          }
-        },
-        {
           "id": "groupingToMatrix",
           "filter": {
             "id": "byRefId",
@@ -1572,18 +1560,6 @@
             ],
             "mode": "seriesToRows",
             "labelsToFields": true
-          }
-        },
-        {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-H-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
           }
         },
         {
@@ -1633,18 +1609,6 @@
             ],
             "mode": "seriesToRows",
             "labelsToFields": true
-          }
-        },
-        {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-N-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
           }
         },
         {
@@ -1719,18 +1683,6 @@
           }
         },
         {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-U-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
-          }
-        },
-        {
           "id": "filterByValue",
           "filter": {
             "id": "byRefId",
@@ -1799,18 +1751,6 @@
             ],
             "mode": "seriesToRows",
             "labelsToFields": true
-          }
-        },
-        {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-T-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
           }
         },
         {
@@ -1948,18 +1888,6 @@
           }
         },
         {
-          "id": "formatString",
-          "filter": {
-            "id": "byRefId",
-            "options": "/^reduce-P-/"
-          },
-          "options": {
-            "stringField": "host",
-            "outputFormat": "Substring",
-            "substringStart": 4
-          }
-        },
-        {
           "id": "groupBy",
           "filter": {
             "id": "byRefId",
@@ -2057,7 +1985,7 @@
       "type": "table",
       "timeFrom": "5m",
       "timeShift": null,
-      "description": "按机器后缀合并 sys_ 与 phy_ 数据：sys_ 提供系统资源，phy_ 提供温度与硬件探测。"
+      "description": "按当前 Zabbix visible name 汇总服务器指标；兼容 ServerXX、云服务器以及历史 sys_/phy_ 主机。"
     },
     {
       "datasource": {
